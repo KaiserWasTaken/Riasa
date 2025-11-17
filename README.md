@@ -125,5 +125,4 @@ git checkout -b nueva_rama
 
 ---
 
-Si quieres, te lo preparo también en archivo descargable o en formato para enviar por correo.
 
