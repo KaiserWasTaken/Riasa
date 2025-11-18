@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Tienda</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .panel {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .panel:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .panel-image {
+            height: 180px;
+            background-color: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .panel-image img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        
+        .panel-content {
+            padding: 20px;
+        }
+        
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .panel-description {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+        
+        .compras {
+            border-top: 5px solid #e74c3c;
+        }
+        
+        .productos {
+            border-top: 5px solid #3498db;
+        }
+        
+        .clientes {
+            border-top: 5px solid #2ecc71;
+        }
+        
+        .ventas {
+            border-top: 5px solid #f39c12;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Riasa Aires Acondicionados</h1>
+            <p class="subtitle">Sistema de Administrador</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="panel compras" onclick="seleccionarPanel('compras')">
+                <div class="panel-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZjc0YzNjIiBkPSJNMTYwIDk2aDk2djE2aC05NnptMjI0IDE2aC05NnYtMTZoOTZ6bS05Ni0xNnYxNmgtMTZ2LTE2em0tMzIgMTZoLTE2di0xNmgxNnptLTY0IDBoLTE2di0xNmgxNnptMjI0IDY0YzAtMjYuNS0yMS41LTQ4LTQ4LTQ4SDExMmMtMjYuNSAwLTQ4IDIxLjUtNDggNDh2MjU2YzAgMjYuNSAyMS41IDQ4IDQ4IDQ4aDI4OGMyNi41IDAgNDgtMjEuNSA0OC00OFYxNjB6bS00OC0xNmMtOC44IDAtMTYgNy4yLTE2IDE2czcuMiAxNiAxNiAxNmgzMmM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNmgtMzJ6bTAgNjRjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoMTYwYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2em0yNTYgMTkyYzAgOC44LTcuMiAxNi0xNiAxNkgxNjBjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZoMzM2YzguOCAwIDE2IDcuMiAxNiAxNnoiLz48L3N2Zz4=" alt="Compras">
+                </div>
+                <div class="panel-content">
+                    <h2 class="panel-title">Compras</h2>
+                    <p class="panel-description">Gestiona las compras a proveedores, órdenes de compra y control de inventario.</p>
+                </div>
+            </div>
+            
+            <div class="panel productos" onclick="seleccionarPanel('productos')">
+                <div class="panel-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjMzQ5OGRiIiBkPSJNNDY0IDQ0OEg0OEMyMS41IDQ0OCAwIDQyNi41IDAgNDAwVjExMmMwLTI2LjUgMjEuNS00OCA0OC00OGg0MTZjMjYuNSAwIDQ4IDIxLjUgNDggNDh2Mjg4YzAgMjYuNS0yMS41IDQ4LTQ4IDQ4ek0zMjAgMTI4Yy0zNS4zIDAtNjQgMjguNy02NCA2NHMyOC43IDY0IDY0IDY0IDY0LTI4LjcgNjQtNjQtMjguNy02NC02NC02NHptMTI4IDI1Nkg2NFYyMjRoNzJ2NzJjMCAxMy4zIDEwLjcgMjQgMjQgMjRoODBjMTMuMyAwIDI0LTEwLjcgMjQtMjR2LTcyaDcyeiIvPjwvc3ZnPg==" alt="Productos">
+                </div>
+                <div class="panel-content">
+                    <h2 class="panel-title">Productos</h2>
+                    <p class="panel-description">Administra el catálogo de productos, precios, categorías y existencias.</p>
+                </div>
+            </div>
+            
+            <div class="panel clientes" onclick="seleccionarPanel('clientes')">
+                <div class="panel-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjMmVjYzcxIiBkPSJNNDA2LjUgMTk5LjVjMC03My41LTU5LjUtMTMzLTEzMy0xMzNzLTEzMyA1OS41LTEzMyAxMzMgNTkuNSAxMzMgMTMzIDEzMyAxMzMtNTkuNSAxMzMtMTMzem0tMjY2IDBjMC01NS4yIDQ0LjgtMTAwIDEwMC0xMDBzMTAwIDQ0LjggMTAwIDEwMC00NC44IDEwMC0xMDAgMTAwLTEwMC00NC44LTEwMC0xMDB6TTQ2NCAyODhIMjU2Yy04LjggMC0xNi03LjItMTYtMTZzNy4yLTE2IDE2LTE2aDIwOGM4LjggMCAxNiA3LjIgMTYgMTZzLTcuMiAxNi0xNiAxNnptMCA2NEgyNTZjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZoMjA4YzguOCAwIDE2IDcuMiAxNiAxNnMtNy4yIDE2LTE2IDE2em0wIDY0SDI1NmMtOC44IDAtMTYtNy4yLTE2LTE2czcuMi0xNiAxNi0xNmgyMDhjOC44IDAgMTYgNy4yIDE2IDE2cy03LjIgMTYtMTYgMTZ6TTQ4IDQ0OGMwIDguOCA3LjIgMTYgMTYgMTZoMzg0YzguOCAwIDE2LTcuMiAxNi0xNlYzODRINDh2NjR6Ii8+PC9zdmc+" alt="Clientes">
+                </div>
+                <div class="panel-content">
+                    <h2 class="panel-title">Clientes</h2>
+                    <p class="panel-description">Administra la base de datos de clientes, historial de compras y preferencias.</p>
+                </div>
+            </div>
+            
+            <div class="panel ventas" onclick="seleccionarPanel('ventas')">
+                <div class="panel-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZjM5YzEyIiBkPSJNNDQ4IDk2SDIwOGMtMTcuNyAwLTMyIDE0LjMtMzIgMzJ2OTZoLTEyYy0xNy43IDAtMzIgMTQuMy0zMiAzMnYxOTJjMCAxNy43IDE0LjMgMzIgMzIgMzJoMzUyYzE3LjcgMCAzMi0xNC4zIDMyLTMyVjEyOGMwLTE3LjctMTQuMy0zMi0zMi0zMnptLTMyIDI1NkgxOTJ2LTY0aDIyNHY2NHptMC05NkgxOTJ2LTY0aDIyNHY2NHptMzIgMTI4YzAgMTcuNy0xNC4zIDMyLTMyIDMySDY0Yy0xNy43IDAtMzItMTQuMy0zMi0zMlYxNjBjMC0xNy43IDE0LjMtMzIgMzItMzJoMzJ2MzJINjR2MjU2aDM1MlYzODR6Ii8+PC9zdmc+" alt="Ventas">
+                </div>
+                <div class="panel-content">
+                    <h2 class="panel-title">Ventas</h2>
+                    <p class="panel-description">Controla las ventas, facturación, reportes y análisis de rendimiento comercial.</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Sistema de Gestión para Tienda &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        function seleccionarPanel(panel) {
+            alert(`Has seleccionado el panel de ${panel.toUpperCase()}`);
+            // Aquí puedes redirigir a la página correspondiente o mostrar más contenido
+            // window.location.href = `/${panel}.html`;
+        }
+    </script>
+</body>
+</html>
