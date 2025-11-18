@@ -163,43 +163,47 @@
             <input type="text" class="search-input" placeholder="Buscar cliente por nombre o RFC" oninput="buscarCliente(this.value)">
         </div>
 
-        <table id="tabla-clientes">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>RFC</th>
-                    <th>Teléfono</th>
-                    <th>Email</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- ejemplito -->
-                <tr>
-                    <td>Juan</td>
-                    <td>Carlos</td>
-                    <td>JUAP800101XXX</td>
-                    <td>555-123-4567</td>
-                    <td>juanka@mail.com</td>
-                    <td>
-                        <button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button>
-                        <button class="delete-btn" onclick="alert('Eliminar cliente')">Eliminar</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Emanuel</td>
-                    <td>Zurita</td>
-                    <td>EZM900202XXX</td>
-                    <td>555-987-6543</td>
-                    <td>ema@mail.com</td>
-                    <td>
-                        <button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button>
-                        <button class="delete-btn" onclick="alert('Eliminar cliente')">Eliminar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<table id="tabla-clientes">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>RFC</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- ejemplito -->
+        <tr>
+            <td>Juan</td>
+            <td>Canseco</td>
+            <td>García</td>
+            <td>JUAP800101XXX</td>
+            <td>555-123-4567</td>
+            <td>juanka@mail.com</td>
+            <td>
+                <button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button>
+                <button class="delete-btn" onclick="alert('Eliminar cliente')">Eliminar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Emanuel</td>
+            <td>Zurita</td>
+            <td>Martínez</td>
+            <td>EZM900202XXX</td>
+            <td>555-987-6543</td>
+            <td>ema@mail.com</td>
+            <td>
+                <button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button>
+                <button class="delete-btn" onclick="alert('Eliminar cliente')">Eliminar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 
         <footer>
             <p>Sistema de Gestión Riasa &copy; 2023</p>
@@ -214,7 +218,7 @@
             for (let i = 1; i < filas.length; i++) {
                 let mostrar = false;
                 const celdas = filas[i].getElementsByTagName('td');
-                for (let j = 0; j < celdas.length - 1; j++) { // excluye columna de acciones
+                for (let j = 0; j < celdas.length - 1; j++) { 
                     if (celdas[j].innerText.toLowerCase().includes(valor.toLowerCase())) {
                         mostrar = true;
                         break;
@@ -226,4 +230,5 @@
     </script>
 </body>
 </html>
+
 
