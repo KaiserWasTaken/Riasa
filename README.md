@@ -1,5 +1,5 @@
 # Riasa
-Salvador gei
+Dani gei homosexual
 
 ## 1) Instalar lo necesario
 
