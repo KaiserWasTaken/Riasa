@@ -57,16 +57,7 @@
             color: #f1c40f;
         }
         
-        .priority-high {
-            display: inline-block;
-            background-color: #e74c3c;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-left: 10px;
-        }
+        
         
         .main-content {
             display: grid;
@@ -374,7 +365,7 @@
             <div class="header-content">
                 <h1>Registro de Vehículos <span class="priority-high">Alta Prioridad</span></h1>
                 <div class="requirement-info">
-                    <span class="requirement-id">RF002</span> - Trazabilidad: RD003
+                 
                 </div>
             </div>
         </header>
