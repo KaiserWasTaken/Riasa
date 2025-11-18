@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Tienda</title>
+    <title>Panel de Control - Riasa Aires Acondicionados</title>
     <style>
         * {
             margin: 0;
@@ -109,6 +109,10 @@
             border-top: 5px solid #f39c12;
         }
         
+        .servicios {
+            border-top: 5px solid #9b59b6;
+        }
+        
         footer {
             text-align: center;
             margin-top: 50px;
@@ -142,7 +146,7 @@
         </header>
         
         <div class="dashboard">
-            <div class="panel compras" onclick="seleccionarPanel('compras')">
+            <div class="panel compras" onclick="redirigir('compras')">
                 <div class="panel-image">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZjc0YzNjIiBkPSJNMTYwIDk2aDk2djE2aC05NnptMjI0IDE2aC05NnYtMTZoOTZ6bS05Ni0xNnYxNmgtMTZ2LTE2em0tMzIgMTZoLTE2di0xNmgxNnptLTY0IDBoLTE2di0xNmgxNnptMjI0IDY0YzAtMjYuNS0yMS41LTQ4LTQ4LTQ4SDExMmMtMjYuNSAwLTQ4IDIxLjUtNDggNDh2MjU2YzAgMjYuNSAyMS41IDQ4IDQ4IDQ4aDI4OGMyNi41IDAgNDgtMjEuNSA0OC00OFYxNjB6bS00OC0xNmMtOC44IDAtMTYgNy4yLTE2IDE2czcuMiAxNiAxNiAxNmgzMmM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNmgtMzJ6bTAgNjRjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoMTYwYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2em0yNTYgMTkyYzAgOC44LTcuMiAxNi0xNiAxNkgxNjBjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZoMzM2YzguOCAwIDE2IDcuMiAxNiAxNnoiLz48L3N2Zz4=" alt="Compras">
                 </div>
@@ -152,7 +156,7 @@
                 </div>
             </div>
             
-            <div class="panel productos" onclick="seleccionarPanel('productos')">
+            <div class="panel productos" onclick="redirigir('productos')">
                 <div class="panel-image">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjMzQ5OGRiIiBkPSJNNDY0IDQ0OEg0OEMyMS41IDQ0OCAwIDQyNi41IDAgNDAwVjExMmMwLTI2LjUgMjEuNS00OCA0OC00OGg0MTZjMjYuNSAwIDQ4IDIxLjUgNDggNDh2Mjg4YzAgMjYuNS0yMS41IDQ4LTQ4IDQ4ek0zMjAgMTI4Yy0zNS4zIDAtNjQgMjguNy02NCA2NHMyOC43IDY0IDY0IDY0IDY0LTI4LjcgNjQtNjQtMjguNy02NC02NC02NHptMTI4IDI1Nkg2NFYyMjRoNzJ2NzJjMCAxMy4zIDEwLjcgMjQgMjQgMjRoODBjMTMuMyAwIDI0LTEwLjcgMjQtMjR2LTcyaDcyeiIvPjwvc3ZnPg==" alt="Productos">
                 </div>
@@ -162,7 +166,7 @@
                 </div>
             </div>
             
-            <div class="panel clientes" onclick="seleccionarPanel('clientes')">
+            <div class="panel clientes" onclick="redirigir('clientes')">
                 <div class="panel-image">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjMmVjYzcxIiBkPSJNNDA2LjUgMTk5LjVjMC03My41LTU5LjUtMTMzLTEzMy0xMzNzLTEzMyA1OS41LTEzMyAxMzMgNTkuNSAxMzMgMTMzIDEzMyAxMzMtNTkuNSAxMzMtMTMzem0tMjY2IDBjMC01NS4yIDQ0LjgtMTAwIDEwMC0xMDBzMTAwIDQ0LjggMTAwIDEwMC00NC44IDEwMC0xMDAgMTAwLTEwMC00NC44LTEwMC0xMDB6TTQ2NCAyODhIMjU2Yy04LjggMC0xNi03LjItMTYtMTZzNy4yLTE2IDE2LTE2aDIwOGM4LjggMCAxNiA3LjIgMTYgMTZzLTcuMiAxNi0xNiAxNnptMCA2NEgyNTZjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZoMjA4YzguOCAwIDE2IDcuMiAxNiAxNnMtNy4yIDE2LTE2IDE2em0wIDY0SDI1NmMtOC44IDAtMTYtNy4yLTE2LTE2czcuMi0xNiAxNi0xNmgyMDhjOC44IDAgMTYgNy4yIDE2IDE2cy03LjIgMTYtMTYgMTZ6TTQ4IDQ0OGMwIDguOCA3LjIgMTYgMTYgMTZoMzg0YzguOCAwIDE2LTcuMiAxNi0xNlYzODRINDh2NjR6Ii8+PC9zdmc+" alt="Clientes">
                 </div>
@@ -172,7 +176,7 @@
                 </div>
             </div>
             
-            <div class="panel ventas" onclick="seleccionarPanel('ventas')">
+            <div class="panel ventas" onclick="redirigir('ventas')">
                 <div class="panel-image">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZjM5YzEyIiBkPSJNNDQ4IDk2SDIwOGMtMTcuNyAwLTMyIDE0LjMtMzIgMzJ2OTZoLTEyYy0xNy43IDAtMzIgMTQuMy0zMiAzMnYxOTJjMCAxNy43IDE0LjMgMzIgMzIgMzJoMzUyYzE3LjcgMCAzMi0xNC4zIDMyLTMyVjEyOGMwLTE3LjctMTQuMy0zMi0zMi0zMnptLTMyIDI1NkgxOTJ2LTY0aDIyNHY2NHptMC05NkgxOTJ2LTY0aDIyNHY2NHptMzIgMTI4YzAgMTcuNy0xNC4zIDMyLTMyIDMySDY0Yy0xNy43IDAtMzItMTQuMy0zMi0zMlYxNjBjMC0xNy43IDE0LjMtMzIgMzItMzJoMzJ2MzJINjR2MjU2aDM1MlYzODR6Ii8+PC9zdmc+" alt="Ventas">
                 </div>
@@ -181,17 +185,377 @@
                     <p class="panel-description">Controla las ventas, facturación, reportes y análisis de rendimiento comercial.</p>
                 </div>
             </div>
+            
+            <div class="panel servicios" onclick="redirigir('servicios')">
+                <div class="panel-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjOWI1OWI2IiBkPSJNNDQ4IDk2SDY0QzI4LjcgOTYgMCAxMjQuNyAwIDE2MHYxOTJjMCAzNS4zIDI4LjcgNjQgNjQgNjRoMzg0YzM1LjMgMCA2NC0yOC43IDY0LTY0VjE2MGMwLTM1LjMtMjguNy02NC02NC02NHptLTMyIDI1Nkg5NnYtNjRoMzIwdjY0em0wLTk2SDk2di02NGgzMjB2NjR6bTMyLTEyOGMwIDE3LjctMTQuMyAzMi0zMiAzMkg2NGMtMTcuNyAwLTMyLTE0LjMtMzItMzJWMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMyaDM4NGMxNy43IDAgMzIgMTQuMyAzMiAzMnY2NHoiLz48L3N2Zz4=" alt="Servicios">
+                </div>
+                <div class="panel-content">
+                    <h2 class="panel-title">Servicios</h2>
+                    <p class="panel-description">Gestiona servicios técnicos, mantenimientos, instalaciones y reparaciones.</p>
+                </div>
+            </div>
         </div>
         
         <footer>
-            <p>Sistema de Gestión para Tienda &copy; 2023</p>
+            <p>Riasa Aires Acondicionados &copy; 2025</p>
         </footer>
     </div>
 
     <script>
-        function seleccionarPanel(panel) {
-            alert(`Has seleccionado el panel de ${panel.toUpperCase()}`);
+        function redirigir(modulo) {
+          
+            const paginas = {
+                'compras': 'compras.html',
+                'productos': 'productos.html',
+                'clientes': 'clientes.html',
+                'ventas': 'ventas.html',
+                'servicios': 'servicios.html'
+            };
             
+            
+            if (!sessionStorage.getItem(`pagina_${modulo}_creada`)) {
+                crearPaginaModulo(modulo);
+                sessionStorage.setItem(`pagina_${modulo}_creada`, 'true');
+            }
+            
+           
+            window.location.href = paginas[modulo];
+        }
+        
+        function crearPaginaModulo(modulo) {
+            
+            const contenido = `
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${capitalizeFirstLetter(modulo)} - Riasa</title>
+                <style>
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    }
+                    
+                    body {
+                        background-color: #f5f7fa;
+                        color: #333;
+                        padding: 20px;
+                    }
+                    
+                    .container {
+                        max-width: 1200px;
+                        margin: 0 auto;
+                    }
+                    
+                    header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 30px;
+                        padding: 20px;
+                        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+                        color: white;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .back-button {
+                        background: rgba(255, 255, 255, 0.2);
+                        border: none;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        transition: background 0.3s;
+                    }
+                    
+                    .back-button:hover {
+                        background: rgba(255, 255, 255, 0.3);
+                    }
+                    
+                    h1 {
+                        font-size: 2rem;
+                    }
+                    
+                    .subtitle {
+                        font-size: 1.2rem;
+                        opacity: 0.9;
+                    }
+                    
+                    .module-content {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                        gap: 20px;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .card {
+                        background-color: white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+                    }
+                    
+                    .card h3 {
+                        margin-bottom: 15px;
+                        color: #2c3e50;
+                        border-bottom: 2px solid #f0f0f0;
+                        padding-bottom: 10px;
+                    }
+                    
+                    .card ul {
+                        list-style-type: none;
+                    }
+                    
+                    .card li {
+                        padding: 8px 0;
+                        border-bottom: 1px solid #f0f0f0;
+                        cursor: pointer;
+                        transition: color 0.2s;
+                    }
+                    
+                    .card li:hover {
+                        color: #3498db;
+                    }
+                    
+                    .card li:last-child {
+                        border-bottom: none;
+                    }
+                    
+                    .stats {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                        gap: 20px;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .stat-card {
+                        background-color: white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                        text-align: center;
+                    }
+                    
+                    .stat-value {
+                        font-size: 2.5rem;
+                        font-weight: bold;
+                        margin: 10px 0;
+                    }
+                    
+                    .stat-label {
+                        color: #7f8c8d;
+                        font-size: 0.9rem;
+                    }
+                    
+                    footer {
+                        text-align: center;
+                        margin-top: 50px;
+                        padding: 20px;
+                        color: #7f8c8d;
+                        font-size: 0.9rem;
+                    }
+                    
+                    @media (max-width: 768px) {
+                        header {
+                            flex-direction: column;
+                            gap: 15px;
+                            text-align: center;
+                        }
+                        
+                        .module-content, .stats {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <header>
+                        <button class="back-button" onclick="volverAlPanel()">← Volver al Panel</button>
+                        <div>
+                            <h1>Módulo de ${capitalizeFirstLetter(modulo)}</h1>
+                            <p class="subtitle">Riasa Aires Acondicionados</p>
+                        </div>
+                    </header>
+                    
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value">${obtenerEstadistica(modulo, 'valor1')}</div>
+                            <div class="stat-label">${obtenerEtiquetaEstadistica(modulo, 'valor1')}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${obtenerEstadistica(modulo, 'valor2')}</div>
+                            <div class="stat-label">${obtenerEtiquetaEstadistica(modulo, 'valor2')}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${obtenerEstadistica(modulo, 'valor3')}</div>
+                            <div class="stat-label">${obtenerEtiquetaEstadistica(modulo, 'valor3')}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-content">
+                        ${generarContenidoModulo(modulo)}
+                    </div>
+                    
+                    <footer>
+                        <p>Riasa Aires Acondicionados &copy; 2025</p>
+                    </footer>
+                </div>
+
+                <script>
+                    function volverAlPanel() {
+                        window.location.href = 'index.html';
+                    }
+                    
+                    function capitalizeFirstLetter(string) {
+                        return string.charAt(0).toUpperCase() + string.slice(1);
+                    }
+                    
+                    function obtenerEstadistica(modulo, tipo) {
+                        const estadisticas = {
+                            'compras': {'valor1': '24', 'valor2': '$12,450', 'valor3': '15'},
+                            'productos': {'valor1': '156', 'valor2': '28', 'valor3': '12'},
+                            'clientes': {'valor1': '342', 'valor2': '45', 'valor3': '87%'},
+                            'ventas': {'valor1': '$58,230', 'valor2': '124', 'valor3': '18%'},
+                            'servicios': {'valor1': '42', 'valor2': '18', 'valor3': '94%'}
+                        };
+                        return estadisticas[modulo][tipo];
+                    }
+                    
+                    function obtenerEtiquetaEstadistica(modulo, tipo) {
+                        const etiquetas = {
+                            'compras': {'valor1': 'Órdenes Activas', 'valor2': 'Valor Total', 'valor3': 'Proveedores'},
+                            'productos': {'valor1': 'Productos Activos', 'valor2': 'Bajo Stock', 'valor3': 'Nuevos este mes'},
+                            'clientes': {'valor1': 'Clientes Registrados', 'valor2': 'Nuevos este mes', 'valor3': 'Tasa de Retención'},
+                            'ventas': {'valor1': 'Ventas del Mes', 'valor2': 'Transacciones', 'valor3': 'Crecimiento'},
+                            'servicios': {'valor1': 'Servicios Activos', 'valor2': 'Pendientes', 'valor3': 'Satisfacción'}
+                        };
+                        return etiquetas[modulo][tipo];
+                    }
+                    
+                    function generarContenidoModulo(modulo) {
+                        const contenidos = {
+                            'compras': \`
+                                <div class="card">
+                                    <h3>Gestión de Compras</h3>
+                                    <ul>
+                                        <li onclick="alert('Nueva orden de compra')">Nueva Orden de Compra</li>
+                                        <li onclick="alert('Ver órdenes pendientes')">Órdenes Pendientes</li>
+                                        <li onclick="alert('Historial de compras')">Historial de Compras</li>
+                                        <li onclick="alert('Gestión de proveedores')">Proveedores</li>
+                                    </ul>
+                                </div>
+                                <div class="card">
+                                    <h3>Inventario</h3>
+                                    <ul>
+                                        <li onclick="alert('Control de stock')">Control de Stock</li>
+                                        <li onclick="alert('Alertas de inventario')">Alertas de Inventario</li>
+                                        <li onclick="alert('Ajustes de inventario')">Ajustes de Inventario</li>
+                                    </ul>
+                                </div>
+                            \`,
+                            'productos': \`
+                                <div class="card">
+                                    <h3>Catálogo</h3>
+                                    <ul>
+                                        <li onclick="alert('Agregar nuevo producto')">Agregar Producto</li>
+                                        <li onclick="alert('Ver todos los productos')">Lista de Productos</li>
+                                        <li onclick="alert('Gestionar categorías')">Categorías</li>
+                                        <li onclick="alert('Gestionar marcas')">Marcas</li>
+                                    </ul>
+                                </div>
+                                <div class="card">
+                                    <h3>Precios y Promociones</h3>
+                                    <ul>
+                                        <li onclick="alert('Ajustar precios')">Ajustar Precios</li>
+                                        <li onclick="alert('Crear promoción')">Crear Promoción</li>
+                                        <li onclick="alert('Descuentos especiales')">Descuentos Especiales</li>
+                                    </ul>
+                                </div>
+                            \`,
+                            'clientes': \`
+                                <div class="card">
+                                    <h3>Gestión de Clientes</h3>
+                                    <ul>
+                                        <li onclick="alert('Agregar nuevo cliente')">Agregar Cliente</li>
+                                        <li onclick="alert('Lista de clientes')">Lista de Clientes</li>
+                                        <li onclick="alert('Segmentación de clientes')">Segmentación</li>
+                                        <li onclick="alert('Clientes frecuentes')">Clientes Frecuentes</li>
+                                    </ul>
+                                </div>
+                                <div class="card">
+                                    <h3>Comunicación</h3>
+                                    <ul>
+                                        <li onclick="alert('Enviar correo masivo')">Correo Masivo</li>
+                                        <li onclick="alert('Programar recordatorios')">Recordatorios</li>
+                                        <li onclick="alert('Encuestas de satisfacción')">Encuestas</li>
+                                    </ul>
+                                </div>
+                            \`,
+                            'ventas': \`
+                                <div class="card">
+                                    <h3>Ventas</h3>
+                                    <ul>
+                                        <li onclick="alert('Nueva venta')">Nueva Venta</li>
+                                        <li onclick="alert('Ver ventas del día')">Ventas del Día</li>
+                                        <li onclick="alert('Historial de ventas')">Historial de Ventas</li>
+                                        <li onclick="alert('Devoluciones')">Devoluciones</li>
+                                    </ul>
+                                </div>
+                                <div class="card">
+                                    <h3>Reportes</h3>
+                                    <ul>
+                                        <li onclick="alert('Reporte de ventas')">Reporte de Ventas</li>
+                                        <li onclick="alert('Análisis de rendimiento')">Análisis de Rendimiento</li>
+                                        <li onclick="alert('Productos más vendidos')">Productos Más Vendidos</li>
+                                    </ul>
+                                </div>
+                            \`,
+                            'servicios': \`
+                                <div class="card">
+                                    <h3>Gestión de Servicios</h3>
+                                    <ul>
+                                        <li onclick="alert('Nuevo servicio')">Nuevo Servicio</li>
+                                        <li onclick="alert('Servicios pendientes')">Servicios Pendientes</li>
+                                        <li onclick="alert('Calendario de servicios')">Calendario</li>
+                                        <li onclick="alert('Historial de servicios')">Historial</li>
+                                    </ul>
+                                </div>
+                                <div class="card">
+                                    <h3>Técnicos y Recursos</h3>
+                                    <ul>
+                                        <li onclick="alert('Asignar técnicos')">Asignar Técnicos</li>
+                                        <li onclick="alert('Inventario de repuestos')">Repuestos</li>
+                                        <li onclick="alert('Reportes de servicios')">Reportes</li>
+                                    </ul>
+                                </div>
+                            \`
+                        };
+                        return contenidos[modulo];
+                    }
+                </script>
+            </body>
+            </html>
+            `;
+            
+            
+            sessionStorage.setItem(`pagina_${modulo}`, contenido);
+        }
+        
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     </script>
 </body>
