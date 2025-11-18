@@ -120,6 +120,22 @@
             background-color: #d35400;
         }
 
+        .delete-btn {
+            padding: 6px 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            margin-left: 5px; /* espacio entre Modificar y Eliminar */
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
         footer {
             text-align: center;
             margin-top: 50px;
@@ -159,22 +175,28 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Ejemplo de clientes -->
+                <!-- ejemplito -->
                 <tr>
                     <td>Juan</td>
-                    <td>Pérez</td>
+                    <td>Carlos</td>
                     <td>JUAP800101XXX</td>
                     <td>555-123-4567</td>
-                    <td>juanp@mail.com</td>
-                    <td><button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button></td>
+                    <td>juanka@mail.com</td>
+                    <td>
+                        <button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button>
+                        <button class="delete-btn" onclick="alert('Eliminar cliente')">Eliminar</button>
+                    </td>
                 </tr>
                 <tr>
-                    <td>María</td>
-                    <td>López</td>
-                    <td>MALM900202XXX</td>
+                    <td>Emanuel</td>
+                    <td>Zurita</td>
+                    <td>EZM900202XXX</td>
                     <td>555-987-6543</td>
-                    <td>marial@mail.com</td>
-                    <td><button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button></td>
+                    <td>ema@mail.com</td>
+                    <td>
+                        <button class="edit-btn" onclick="alert('Modificar cliente')">Modificar</button>
+                        <button class="delete-btn" onclick="alert('Eliminar cliente')">Eliminar</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
