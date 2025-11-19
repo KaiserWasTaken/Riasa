@@ -1,7 +1,3 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.*;
 import java.util.List;
 
@@ -122,5 +118,52 @@ public class RiasaDAO {
                 }
             } catch (SQLException e) { e.printStackTrace(); }
         }
+    }
+
+    // --- MÉTODO 4: PAGAR Y GENERAR FACTURA ---
+    public int generarFactura(int idCotizacion, String metodoPago, double montoEntregado, String rfcCliente) {
+        Connection conn = null;
+        try {
+            conn = Conexion.getConexion();
+            
+            // 1. VALIDACIÓN: Verificar cuánto costaba la cotización original
+            String sqlVerificar = "SELECT total FROM cotizaciones WHERE id = ?";
+            PreparedStatement psCheck = conn.prepareStatement(sqlVerificar);
+            psCheck.setInt(1, idCotizacion);
+            ResultSet rs = psCheck.executeQuery();
+
+            if (rs.next()) {
+                double totalReal = rs.getDouble("total");
+                
+                // Regla de Negocio: No permitir pago si el monto es menor
+                if (montoEntregado < totalReal) {
+                    System.out.println("Error: El pago es insuficiente. Total a pagar: " + totalReal);
+                    return -1;
+                }
+            } else {
+                System.out.println("Error: La cotización no existe.");
+                return -1;
+            }
+
+            // 2. INSERTAR LA FACTURA
+            String sqlInsert = "INSERT INTO facturas (cotizacion_id, metodo_pago, monto_pagado, rfc_receptor) VALUES (?, ?, ?, ?)";
+            PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+            psInsert.setInt(1, idCotizacion);
+            psInsert.setString(2, metodoPago);
+            psInsert.setDouble(3, montoEntregado);
+            psInsert.setString(4, rfcCliente);
+            
+            psInsert.executeUpdate();
+
+            ResultSet rsKeys = psInsert.getGeneratedKeys();
+            if (rsKeys.next()) {
+                return rsKeys.getInt(1); // Retornamos el ID de la factura nueva
+            }
+
+        } catch (SQLException e) {
+            // Si falla (ej. intentas pagar una cotización ya pagada), caerá aquí por la restricción UNIQUE
+            System.out.println("Error al facturar: " + e.getMessage());
+        }
+        return -1;
     }
 }

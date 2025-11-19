@@ -68,4 +68,66 @@ public class GeneradorPDF {
             System.out.println("Error al crear PDF: " + e.getMessage());
         }
     }
+    // --- NUEVO MÉTODO PARA FACTURAS ---
+    public void crearTicketFactura(int idFactura, int idCotizacion, String cliente, double total, String metodoPago) {
+        Document documento = new Document();
+        String nombreArchivo = "Factura_Folio_" + idFactura + ".pdf";
+
+        try {
+            PdfWriter.getInstance(documento, new FileOutputStream(nombreArchivo));
+            documento.open();
+
+            // Encabezado
+            Font fontTitulo = FontFactory.getFont(FontFactory.COURIER_BOLD, 18, BaseColor.BLACK);
+            Paragraph titulo = new Paragraph("FACTURA ELECTRÓNICA - RIASA", fontTitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(titulo);
+            
+            documento.add(new Paragraph("RFC Emisor: RIA-901010-KG4")); // RFC Ficticio del taller
+            documento.add(new Paragraph("Fecha de Emisión: " + new java.util.Date()));
+            documento.add(new Paragraph("--------------------------------------------------"));
+
+            // Datos del Cliente y Servicio
+            documento.add(new Paragraph("FACTURA FOLIO: " + idFactura));
+            documento.add(new Paragraph("Referencia Cotización: #" + idCotizacion));
+            documento.add(new Paragraph("Cliente: " + cliente));
+            documento.add(new Paragraph("--------------------------------------------------"));
+
+            // Cuerpo del pago
+            Paragraph pEstado = new Paragraph("ESTADO: PAGADO", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.GREEN));
+            pEstado.setAlignment(Element.ALIGN_CENTER);
+            documento.add(pEstado);
+            
+            documento.add(new Paragraph(" ")); // Espacio
+            
+            // Tabla de totales
+            PdfPTable tabla = new PdfPTable(2);
+            tabla.addCell("Concepto");
+            tabla.addCell("Monto");
+            
+            tabla.addCell("Importe Total");
+            tabla.addCell("$ " + total);
+            
+            tabla.addCell("Método de Pago");
+            tabla.addCell(metodoPago);
+            
+            documento.add(tabla);
+            
+            documento.add(new Paragraph(" "));
+            Paragraph pie = new Paragraph("¡Gracias por su preferencia!", FontFactory.getFont(FontFactory.TIMES_ITALIC, 10));
+            pie.setAlignment(Element.ALIGN_CENTER);
+            documento.add(pie);
+
+            documento.close();
+            
+            // Abrir PDF
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(new File(nombreArchivo));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

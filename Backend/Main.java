@@ -43,6 +43,8 @@ public class Main {
         }
         */
 
+        /* 
+        // --- SIMULACIÓN DE CREAR COTIZACIÓN ---
         String rfcCliente = "XAXX010101000"; // Asegúrate que este RFC exista en tu BD
         String placaAuto = "ABC-123";       // Asegúrate que esta placa exista en tu BD
         
@@ -67,6 +69,29 @@ public class Main {
             
         } else {
             System.out.println("❌ Error al guardar la cotización.");
+        }
+        */
+
+        // --- DATOS QUE VENDRÍAN DE LA INTERFAZ GRÁFICA ---
+        int idCotizacionAPagar = 1; // <--- CAMBIA ESTO por un ID real que tengas en tu tabla 'cotizaciones'
+        String rfcCliente = "XAXX010101000"; 
+        String metodoPago = "Tarjeta de Crédito";
+        double montoRecibido = 3560.50; // Debe ser igual o mayor al total de la cotización
+
+        System.out.println("--- INICIANDO PROCESO DE COBRO ---");
+
+        // 1. Llamamos al DAO para validar y registrar
+        int idFactura = dao.generarFactura(idCotizacionAPagar, metodoPago, montoRecibido, rfcCliente);
+
+        if (idFactura != -1) {
+            System.out.println("✅ Pago registrado exitosamente. Factura ID: " + idFactura);
+
+            // 2. Generamos el documento PDF
+            // Nota: En un sistema real, haríamos otra consulta para obtener el nombre del cliente basado en el RFC
+            pdf.crearTicketFactura(idFactura, idCotizacionAPagar, "Juan Perez (RFC: " + rfcCliente + ")", montoRecibido, metodoPago);
+            
+        } else {
+            System.out.println("❌ Error al generar la factura. Verifique monto o si ya fue pagada.");
         }
     }
 }
