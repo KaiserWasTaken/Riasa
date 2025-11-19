@@ -7,7 +7,7 @@ import javax.swing.*;
 public class AgregarCliente extends JFrame  {
     private JPanel panel;
     private JLabel et1,et5, et6, et7,et8 ,et9,et10;
-    private JButton bt1, bt2, bt3;
+    private JButton btAceptar, btLimpiar, btAtras;
     private JTextField txtRFC, txtNOMBRE, txtTELEFONO, txtDIRECCION, txtEMAIL;
     
     public AgregarCliente(){
@@ -102,20 +102,20 @@ public class AgregarCliente extends JFrame  {
      
     
     private void boton(){
-        bt1= new JButton();
-        bt1.setBounds(70,400,80,20);
-        bt1.setText("Aceptar");
-        panel.add(bt1);
+        btAceptar= new JButton();
+        btAceptar.setBounds(70,400,80,20);
+        btAceptar.setText("Aceptar");
+        panel.add(btAceptar);
         
-        bt2= new JButton();
-        bt2.setBounds(200,400,80,20);
-        bt2.setText("Limpiar");
-        panel.add(bt2);
+        btLimpiar= new JButton();
+        btLimpiar.setBounds(200,400,80,20);
+        btLimpiar.setText("Limpiar");
+        panel.add(btLimpiar);
         
-        bt3= new JButton();
-        bt3.setBounds(330,400,80,20);
-        bt3.setText("Atrás");
-        panel.add(bt3);
+        btAtras= new JButton();
+        btAtras.setBounds(330,400,80,20);
+        btAtras.setText("Atrás");
+        panel.add(btAtras);
     }
     
     private void eventos(){
@@ -126,7 +126,7 @@ public class AgregarCliente extends JFrame  {
                 JOptionPane.showMessageDialog(null, "Kaiser super gei");
                 }
         };
-        bt1.addActionListener(act);
+        btAceptar.addActionListener(act);
         
         //Evento para boton limipar
         ActionListener act1 = new ActionListener() {
@@ -138,7 +138,7 @@ public class AgregarCliente extends JFrame  {
                 txtEMAIL.setText(null);
                 }
         };
-        bt2.addActionListener(act1);
+        btLimpiar.addActionListener(act1);
         
         //Evento para salir del programa
         ActionListener act2 = new ActionListener() {
@@ -148,7 +148,7 @@ public class AgregarCliente extends JFrame  {
                 dispose();
                 }
         };
-        bt3.addActionListener(act2);
+        btAtras.addActionListener(act2);
     }
     
 }
