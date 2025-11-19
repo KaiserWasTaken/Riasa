@@ -7,7 +7,13 @@ import backend.RiasaDAO;
 
 public class AgregarCliente extends JFrame  {
     private JPanel panel;
-    private JLabel et1,et5, et6, et7,et8 ,et9,et10;
+    private JLabel et1;
+    private JLabel et5;
+    private JLabel et6;
+    private JLabel et7;
+    private JLabel et8;
+    private JLabel et9;
+    private JLabel et10;
     private JButton btAceptar, btLimpiar, btAtras;
     private JTextField txtRFC, txtNOMBRE, txtTELEFONO, txtDIRECCION, txtEMAIL;
     

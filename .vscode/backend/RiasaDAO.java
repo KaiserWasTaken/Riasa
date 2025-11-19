@@ -168,4 +168,31 @@ public class RiasaDAO {
         }
         return -1;
     }
+
+    // --- MÉTODO 5: LOGIN SEGURO ---
+    public String login(String usuario, String contraPlana) {
+        String rolEncontrado = null;
+        String sql = "SELECT rol FROM usuarios_sistema WHERE username = ? AND password = ?";
+        
+        try (Connection conn = Conexion.getConexion();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // 1. Encriptamos la contraseña que escribió el usuario
+            String contraEncriptada = Seguridad.encriptar(contraPlana);
+
+            pstmt.setString(1, usuario);
+            pstmt.setString(2, contraEncriptada); // <--- Enviamos el HASH, no el texto plano
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                rolEncontrado = rs.getString("rol");
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error en login: " + e.getMessage());
+        }
+        
+        return rolEncontrado;
+    }
 }
