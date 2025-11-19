@@ -79,19 +79,19 @@ public class AgregarAuto extends JFrame  {
     
     private void campoTexto(){
         txtF1 = new JTextField();
-        txtF1.setBounds(150,150,280,20);
+        txtF1.setBounds(170,150,240,20);
         panel.add(txtF1);
         
         txtF2 = new JTextField();
-        txtF2.setBounds(130,190,280,20);
+        txtF2.setBounds(170,190,240,20);
         panel.add(txtF2);
         
         txtF3 = new JTextField();
-        txtF3.setBounds(130,230,280,20);
+        txtF3.setBounds(170,230,240,20);
         panel.add(txtF3);
         
         txtF4 = new JTextField();
-        txtF4.setBounds(130,270,280,20);
+        txtF4.setBounds(170,270,240,20);
         panel.add(txtF4);
         
         txtF5 = new JTextField();
