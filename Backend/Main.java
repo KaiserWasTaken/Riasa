@@ -1,8 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         RiasaDAO dao = new RiasaDAO();
+        GeneradorPDF pdf = new GeneradorPDF();
 
-        // --- DATOS DE PRUEBA ---
+        /*  --- DATOS DE PRUEBA ---
         // Cliente
         String rfcPrueba = "XAXX010101000"; // Debe cumplir el CHECK (largo >= 12)
         String nombre = "Maria Gonzales";
@@ -36,6 +40,33 @@ public class Main {
         } else {
             System.out.println("❌ No se pudo registrar el cliente (quizás el RFC ya existe o el email está duplicado).");
             System.out.println("   Como falló el cliente, no intentamos registrar el auto.");
+        }
+        */
+
+        String rfcCliente = "XAXX010101000"; // Asegúrate que este RFC exista en tu BD
+        String placaAuto = "ABC-123";       // Asegúrate que esta placa exista en tu BD
+        
+        // 2. Simulamos la lista de servicios que el usuario agregó en la tabla visual
+        List<servicioItem> listaServicios = new ArrayList<>();
+        listaServicios.add(new servicioItem("Cambio de Aceite Sintético", 1, 1200.50));
+        listaServicios.add(new servicioItem("Filtro de Aire", 1, 350.00));
+        listaServicios.add(new servicioItem("Balatas Delanteras", 2, 800.00)); // 2 juegos
+
+        System.out.println("--- GENERANDO COTIZACIÓN ---");
+
+        // 3. Guardamos en Base de Datos
+        int folioGenerado = dao.crearCotizacion(rfcCliente, placaAuto, listaServicios);
+
+        if (folioGenerado != -1) {
+            System.out.println("✅ Guardado en BD con Folio: " + folioGenerado);
+
+            // 4. Si se guardó bien, generamos el PDF
+            // Nota: Aquí podrías hacer una consulta extra para traer el nombre real del cliente,
+            // por ahora lo pondré manual para el ejemplo.
+            pdf.crearDocumento(folioGenerado, "Maria Gonzales", "Nissan Versa", listaServicios);
+            
+        } else {
+            System.out.println("❌ Error al guardar la cotización.");
         }
     }
 }

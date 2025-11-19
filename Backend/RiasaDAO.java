@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
 
 public class RiasaDAO {
 
@@ -52,6 +55,72 @@ public class RiasaDAO {
             System.out.println("Error al registrar auto: " + e.getMessage());
             // Esto imprimirá un error específico si intentas poner un RFC que no existe
             return false;
+        }
+    }
+
+    public int crearCotizacion(String rfc, String placa, List<servicioItem> servicios) {
+        String sqlCabecera = "INSERT INTO cotizaciones (cliente_rfc, auto_placa, total) VALUES (?, ?, ?)";
+        String sqlDetalle = "INSERT INTO detalles_cotizacion (cotizacion_id, descripcion_servicio, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
+        
+        Connection conn = null;
+        int idCotizacionGenerado = -1;
+
+        try {
+            conn = Conexion.getConexion();
+            // 1. IMPORTANTE: Apagamos el guardado automático para manejar la transacción manualmente
+            conn.setAutoCommit(false);
+
+            // --- PASO A: Calcular el total general ---
+            double totalGeneral = 0;
+            for (servicioItem item : servicios) {
+                totalGeneral += item.getSubtotal();
+            }
+
+            // --- PASO B: Insertar la Cabecera ---
+            // RETURN_GENERATED_KEYS es vital para obtener el ID (folio) que Postgres creó automáticamente
+            PreparedStatement psCabecera = conn.prepareStatement(sqlCabecera, Statement.RETURN_GENERATED_KEYS);
+            psCabecera.setString(1, rfc);
+            psCabecera.setString(2, placa);
+            psCabecera.setDouble(3, totalGeneral);
+            psCabecera.executeUpdate();
+
+            // Obtener el ID generado
+            ResultSet rsKeys = psCabecera.getGeneratedKeys();
+            if (rsKeys.next()) {
+                idCotizacionGenerado = rsKeys.getInt(1);
+            } else {
+                throw new SQLException("No se pudo obtener el ID de la cotización.");
+            }
+
+            // --- PASO C: Insertar los Detalles ---
+            PreparedStatement psDetalle = conn.prepareStatement(sqlDetalle);
+            for (servicioItem item : servicios) {
+                psDetalle.setInt(1, idCotizacionGenerado); // Usamos el ID que acabamos de obtener
+                psDetalle.setString(2, item.descripcion);
+                psDetalle.setInt(3, item.cantidad);
+                psDetalle.setDouble(4, item.precio);
+                psDetalle.setDouble(5, item.getSubtotal());
+                psDetalle.addBatch(); // Agregamos al "paquete"
+            }
+            psDetalle.executeBatch(); // Ejecutamos todo el paquete junto
+
+            // --- PASO D: Confirmar todo (Commit) ---
+            conn.commit();
+            return idCotizacionGenerado; // Devolvemos el folio para el PDF
+
+        } catch (SQLException e) {
+            System.out.println("Error en transacción cotización: " + e.getMessage());
+            try {
+                if (conn != null) conn.rollback(); // Si algo falló, deshacemos todo
+            } catch (SQLException ex) { ex.printStackTrace(); }
+            return -1;
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true); // Restauramos el estado normal
+                    conn.close();
+                }
+            } catch (SQLException e) { e.printStackTrace(); }
         }
     }
 }
