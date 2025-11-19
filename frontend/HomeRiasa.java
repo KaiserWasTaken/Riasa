@@ -133,7 +133,9 @@ public class HomeRiasa extends JFrame {
         };
         ActionListener act2 = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Botón presionado");
+                AgregarAuto aa = new AgregarAuto();
+                aa.setVisible(true);
+                dispose();
             }
         };
         ActionListener act3 = new ActionListener() {
