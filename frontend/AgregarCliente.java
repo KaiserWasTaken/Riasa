@@ -1,8 +1,10 @@
-package frontend;
 
+package frontend;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import backend.RiasaDAO; 
 
 public class AgregarCliente extends JFrame  {
     private JPanel panel;
@@ -119,36 +121,74 @@ public class AgregarCliente extends JFrame  {
     }
     
     private void eventos(){
-        //Evento para boton de registro
+        // --- EVENTO BOTÓN ACEPTAR (Guardar en BD) ---
         ActionListener act = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                JOptionPane.showMessageDialog(null, "Kaiser super gei");
+                // 1. Obtener lo que el usuario escribió en las cajas de texto
+                String rfc = txtRFC.getText();
+                String nombre = txtNOMBRE.getText();
+                String telefono = txtTELEFONO.getText();
+                String direccion = txtDIRECCION.getText();
+                String email = txtEMAIL.getText();
+
+                // 2. Validación básica: Que no envíen campos vacíos obligatorios
+                if(rfc.isEmpty() || nombre.isEmpty() || direccion.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor llena los campos obligatorios (RFC, Nombre, Dirección).");
+                    return; // Detiene la ejecución aquí
                 }
+
+                // 3. Conectar con el DAO
+                // Asegúrate de tener acceso a tu clase RiasaDAO aquí
+                RiasaDAO dao = new RiasaDAO(); 
+
+                // 4. Intentar guardar
+                boolean exito = dao.registrarCliente(rfc, nombre, telefono, direccion, email);
+
+                // 5. Dar respuesta al usuario
+                if(exito) {
+                    JOptionPane.showMessageDialog(null, "¡Cliente registrado exitosamente!");
+                    
+                    // Opcional: Limpiar las cajas después de guardar
+                    limpiarCampos(); 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al registrar.\nVerifica que el RFC no esté duplicado o sea muy corto.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         };
         bt1.addActionListener(act);
         
-        //Evento para boton limipar
+        // --- EVENTO BOTÓN LIMPIAR ---
         ActionListener act1 = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                txtRFC.setText(null);
-                txtNOMBRE.setText(null);
-                txtTELEFONO.setText(null);
-                txtDIRECCION.setText(null);
-                txtEMAIL.setText(null);
-                }
+                limpiarCampos(); // Llamamos al método auxiliar
+            }
         };
         bt2.addActionListener(act1);
         
-        //Evento para salir del programa
+        // --- EVENTO BOTÓN ATRÁS ---
         ActionListener act2 = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HomeRiasa hr = new HomeRiasa();
-                hr.setVisible(true);
-                dispose();
+                // Asegúrate de que HomeRiasa exista y esté importado
+                try {
+                    HomeRiasa hr = new HomeRiasa(); // Descomenta cuando tengas la clase HomeRiasa lista
+                    hr.setVisible(true);
+                    dispose();
+                } catch (Exception ex) {
+                    System.out.println("Error al regresar: " + ex.getMessage());
                 }
+            }
         };
         bt3.addActionListener(act2);
+    }
+
+    // Método auxiliar para no repetir código de limpiar
+    private void limpiarCampos() {
+        txtRFC.setText("");
+        txtNOMBRE.setText("");
+        txtTELEFONO.setText("");
+        txtDIRECCION.setText("");
+        txtEMAIL.setText("");
     }
     
 }

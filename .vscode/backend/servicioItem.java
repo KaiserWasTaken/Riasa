@@ -1,3 +1,4 @@
+package backend; // O 'package Backend;' si tu carpeta tiene mayúscula
 
 public class servicioItem {
     String descripcion;
