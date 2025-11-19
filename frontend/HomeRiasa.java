@@ -3,7 +3,6 @@ package frontend;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 public class HomeRiasa extends JFrame {
 
@@ -85,9 +84,9 @@ public class HomeRiasa extends JFrame {
         // TARJETA 3: FACTURACIÓN
         crearTarjeta(mainPanel, 550, 150, "Caja / Factura", "📄", "Cobrar y generar PDF", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes abrir una ventana de "Cobrar" si la creas en el futuro
-                // Por ahora mostramos mensaje o ejecutamos lógica directa
-                JOptionPane.showMessageDialog(null, "Módulo de Facturación (En construcción)");
+                Cotizacion cot = new Cotizacion();
+                cot.setVisible(true);
+                dispose();
             }
         });
         
