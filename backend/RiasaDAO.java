@@ -56,6 +56,27 @@ public class RiasaDAO {
         }
     }
 
+    // --- MÉTODO AUXILIAR: OBTENER NOMBRE POR RFC ---
+    public String obtenerNombreCliente(String rfc) {
+        String nombre = "Cliente General"; // Valor por defecto si no se encuentra
+        String sql = "SELECT nombre FROM clientes WHERE rfc = ?";
+        
+        try (Connection conn = Conexion.getConexion();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, rfc);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                nombre = rs.getString("nombre");
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error al buscar nombre: " + e.getMessage());
+        }
+        return nombre;
+    }
+
     public int crearCotizacion(String rfc, String placa, List<servicioItem> servicios) {
         String sqlCabecera = "INSERT INTO cotizaciones (cliente_rfc, auto_placa, total) VALUES (?, ?, ?)";
         String sqlDetalle = "INSERT INTO detalles_cotizacion (cotizacion_id, descripcion_servicio, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";

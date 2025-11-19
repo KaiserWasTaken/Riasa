@@ -70,12 +70,12 @@ public class GeneradorPDF {
             System.out.println("Error al crear PDF: " + e.getMessage());
         }
     }
-    public void crearTicketFactura(int idFactura, int idCotizacion, String cliente, double total, String metodoPago) {
-        // 1. DEFINIR TAMAÑO TICKET (aprox 80mm ancho x largo variable)
-        // 226 puntos = ~80mm. 800 puntos de largo (ajustable)
-        Rectangle tamanioTicket = new Rectangle(226, 800); 
+    // --- MÉTODO ACTUALIZADO: TICKET CON DETALLES ---
+    // Agregamos el parámetro: List<ServicioItem> servicios
+public void crearTicketFactura(int idFactura, int idCotizacion, String nombreReal, String rfc, double total, String metodoPago, java.util.List<servicioItem> servicios) {
         
-        // Márgenes muy pequeños (izq, der, arriba, abajo)
+        // Tamaño ticket 80mm
+        com.itextpdf.text.Rectangle tamanioTicket = new com.itextpdf.text.Rectangle(226, 1000); // Largo variable
         Document documento = new Document(tamanioTicket, 10, 10, 10, 10); 
         String nombreArchivo = "Ticket_" + idFactura + ".pdf";
 
@@ -83,23 +83,8 @@ public class GeneradorPDF {
             PdfWriter.getInstance(documento, new FileOutputStream(nombreArchivo));
             documento.open();
 
-            // --- A. LOGO (Buscando en carpeta hermana frontend) ---
-            try {
-                // ".." significa subir un nivel, luego entrar a frontend
-                String rutaLogo = "../frontend/logo.png"; // ¡Asegúrate que se llame logo.png o cambia el nombre aquí!
-                Image logo = Image.getInstance(rutaLogo);
-                
-                // Escalar imagen para que quepa en el ticket
-                logo.scaleToFit(100, 100); 
-                logo.setAlignment(Element.ALIGN_CENTER);
-                documento.add(logo);
-            } catch (Exception e) {
-                System.out.println("Aviso: No se encontró el logo en " + "../frontend/logo.png");
-                // Si no encuentra el logo, sigue sin él para no romper el programa
-            }
-
-            // --- B. TEXTOS DEL TICKET ---
-            // Usamos COURIER para que parezca ticket retro
+            // --- LOGO Y ENCABEZADO ---
+            // (Igual que antes...)
             Font fontChica = FontFactory.getFont(FontFactory.COURIER, 8, BaseColor.BLACK);
             Font fontMedia = FontFactory.getFont(FontFactory.COURIER_BOLD, 10, BaseColor.BLACK);
             Font fontGrande = FontFactory.getFont(FontFactory.COURIER_BOLD, 14, BaseColor.BLACK);
@@ -108,7 +93,7 @@ public class GeneradorPDF {
             titulo.setAlignment(Element.ALIGN_CENTER);
             documento.add(titulo);
 
-            Paragraph subtitulo = new Paragraph("RFC: RIA-901010-KG4\nOaxaca, Mexico", fontChica);
+            Paragraph subtitulo = new Paragraph("RFC: RIA-901010-KG4\nOaxaca, Mexico\nTel: 555-000-0000", fontChica);
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             documento.add(subtitulo);
             
@@ -118,34 +103,39 @@ public class GeneradorPDF {
             Paragraph datos = new Paragraph(
                 "Ticket #: " + idFactura + "\n" +
                 "Ref Cot: #" + idCotizacion + "\n" +
-                "Fecha: " + new java.util.Date().toString().substring(0, 10) + "\n" + // Solo fecha corta
-                "Cliente: " + cliente, 
+                "Fecha: " + new java.util.Date().toString().substring(0, 16) + "\n" + 
+                "Cliente: " + nombreReal + "\n" +  // <--- NOMBRE
+                "RFC: " + rfc,                     // <--- RFC
                 fontChica);
             documento.add(datos);
 
             documento.add(new Paragraph("---------------------------------", fontChica));
 
-            // --- C. TABLA COMPACTA ---
-            // Solo 2 columnas para ahorrar espacio
+            // --- TABLA DE PRODUCTOS (DINÁMICA) ---
             PdfPTable tabla = new PdfPTable(2);
             tabla.setWidthPercentage(100); 
-            // Ajustamos ancho de columnas (70% descripción, 30% precio)
-            tabla.setWidths(new float[]{3f, 1.5f}); 
+            tabla.setWidths(new float[]{3f, 1.2f}); // Columna ancha para descripción, angosta para precio
 
             tabla.addCell(new Paragraph("Concepto", fontMedia));
-            tabla.addCell(new Paragraph("Total", fontMedia));
+            tabla.addCell(new Paragraph("Importe", fontMedia));
 
-            // Aquí podrías iterar los productos si los pasaras como lista, 
-            // por ahora ponemos el resumen
-            tabla.addCell(new Paragraph("Servicio General", fontChica));
-            tabla.addCell(new Paragraph("$" + total, fontChica));
+            // *** AQUÍ ESTÁ LA MAGIA: RECORREMOS LA LISTA ***
+            for (servicioItem item : servicios) {
+                // Formato: "2x Aceite de Motor"
+                String desc = item.cantidad + "x " + item.descripcion;
+                double importe = item.cantidad * item.precio;
+
+                // Agregamos a la tabla del PDF
+                tabla.addCell(new Paragraph(desc, fontChica));
+                tabla.addCell(new Paragraph("$" + String.format("%.2f", importe), fontChica));
+            }
 
             documento.add(tabla);
 
             documento.add(new Paragraph("---------------------------------", fontChica));
 
-            // --- D. TOTALES Y PIE ---
-            Paragraph pTotal = new Paragraph("TOTAL: $" + total, fontGrande);
+            // --- TOTALES ---
+            Paragraph pTotal = new Paragraph("TOTAL: $" + String.format("%.2f", total), fontGrande);
             pTotal.setAlignment(Element.ALIGN_RIGHT);
             documento.add(pTotal);
 
@@ -153,14 +143,13 @@ public class GeneradorPDF {
             pMetodo.setAlignment(Element.ALIGN_RIGHT);
             documento.add(pMetodo);
             
-            documento.add(new Paragraph("\n")); // Espacio
+            documento.add(new Paragraph("\n")); 
             
-            Paragraph pie = new Paragraph("¡GRACIAS POR SU VISITA!\nConserve este ticket", fontChica);
+            Paragraph pie = new Paragraph("¡GRACIAS POR SU COMPRA!\nNO SE ACEPTAN DEVOLUCIONES\nDESPUÉS DE 30 DÍAS", fontChica);
             pie.setAlignment(Element.ALIGN_CENTER);
             documento.add(pie);
 
             documento.close();
-            System.out.println("Ticket generado: " + nombreArchivo);
 
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(new File(nombreArchivo));
