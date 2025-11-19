@@ -10,7 +10,7 @@ public class RiasaDAO {
         String sql = "INSERT INTO clientes (rfc, nombre, telefono, direccion, email) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = Conexion.getConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             if (conn == null) return false;
 
@@ -34,7 +34,7 @@ public class RiasaDAO {
         String sql = "INSERT INTO autos (placa, marca, modelo, anio, cliente_rfc) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = Conexion.getConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             if (conn == null) return false;
 

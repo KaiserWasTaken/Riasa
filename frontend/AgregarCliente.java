@@ -1,9 +1,8 @@
-
 package frontend;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
 import backend.RiasaDAO; 
 
 public class AgregarCliente extends JFrame  {
@@ -18,15 +17,17 @@ public class AgregarCliente extends JFrame  {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         panel();
     }
+
     private void panel(){
         panel = new JPanel();
         panel.setLayout(null);
         this.getContentPane().add(panel);
         etiqueta();
-        campoTexto();
+        campoTexto(); // Aquí aplicamos las restricciones de longitud
         boton();
         eventos();
     }
+
     private void etiqueta(){
         et1= new JLabel();
         et1.setText("Registro de cliente");
@@ -38,7 +39,6 @@ public class AgregarCliente extends JFrame  {
         et1.setOpaque(true);
         panel.add(et1);
         
-        
         et5 = new JLabel();
         et5.setBounds(135,100,200,25);
         et5.setText("Datos del cliente");
@@ -46,62 +46,78 @@ public class AgregarCliente extends JFrame  {
         et5.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(et5);
         
-        et6 = new JLabel();
-        et6.setBounds(50,150, 100, 20);
-        et6.setFont(new Font("arial",2,15));
-        et6.setText("RFC: ");
-        panel.add(et6);
+        et6 = new JLabel(); et6.setBounds(50,150, 100, 20);
+        et6.setFont(new Font("arial",2,15)); et6.setText("RFC: "); panel.add(et6);
         
-        et7 = new JLabel();
-        et7.setBounds(50,190, 100, 20);
-        et7.setFont(new Font("arial",2,15));
-        et7.setText("Nombre: ");
-        panel.add(et7);
+        et7 = new JLabel(); et7.setBounds(50,190, 100, 20);
+        et7.setFont(new Font("arial",2,15)); et7.setText("Nombre: "); panel.add(et7);
         
-        et8 = new JLabel();
-        et8.setBounds(50,230, 100, 20);
-        et8.setFont(new Font("arial",2,15));
-        et8.setText("Telefono: ");
-        panel.add(et8);
+        et8 = new JLabel(); et8.setBounds(50,230, 100, 20);
+        et8.setFont(new Font("arial",2,15)); et8.setText("Telefono: "); panel.add(et8);
         
-        et9 = new JLabel();
-        et9.setBounds(50,270, 100, 20);
-        et9.setFont(new Font("arial",2,15));
-        et9.setText("Direccion ");
-        panel.add(et9);
+        et9 = new JLabel(); et9.setBounds(50,270, 100, 20);
+        et9.setFont(new Font("arial",2,15)); et9.setText("Direccion "); panel.add(et9);
         
-        et10 = new JLabel();
-        et10.setBounds(50,310, 100, 20);
-        et10.setFont(new Font("arial",2,15));
-        et10.setText("Email");
-        panel.add(et10);
-        
-        
+        et10 = new JLabel(); et10.setBounds(50,310, 100, 20);
+        et10.setFont(new Font("arial",2,15)); et10.setText("Email"); panel.add(et10);
     }
     
     private void campoTexto(){
+        // --- RFC (VARCHAR 13) ---
         txtRFC = new JTextField();
         txtRFC.setBounds(130,150,280,20);
+        // Aquí limitamos a 13 caracteres y forzamos MAYÚSCULAS automáticamente
+        limitarInput(txtRFC, 13, true); 
         panel.add(txtRFC);
         
+        // --- NOMBRE (VARCHAR 100) ---
         txtNOMBRE = new JTextField();
         txtNOMBRE.setBounds(130,190,280,20);
+        limitarInput(txtNOMBRE, 100, false);
         panel.add(txtNOMBRE);
         
+        // --- TELEFONO (VARCHAR 20) ---
         txtTELEFONO = new JTextField();
         txtTELEFONO.setBounds(130,230,280,20);
+        limitarInput(txtTELEFONO, 20, false); 
+        // Opcional: Podrías agregar validación solo números aquí si quisieras
         panel.add(txtTELEFONO);
         
+        // --- DIRECCION (VARCHAR 255) ---
         txtDIRECCION = new JTextField();
         txtDIRECCION.setBounds(130,270,280,20);
+        limitarInput(txtDIRECCION, 255, false);
         panel.add(txtDIRECCION);
         
+        // --- EMAIL (VARCHAR 100) ---
         txtEMAIL = new JTextField();
         txtEMAIL.setBounds(130,310,280,20);
+        limitarInput(txtEMAIL, 100, false);
         panel.add(txtEMAIL);
     }
-    
-     
+
+    // --- NUEVO MÉTODO AUXILIAR PARA RESTRINGIR ESCRITURA ---
+    private void limitarInput(JTextField campo, int longitudMaxima, boolean soloMayusculas) {
+        campo.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                
+                // 1. Si quiere escribir más del límite, lo bloqueamos (consume)
+                if (campo.getText().length() >= longitudMaxima) {
+                    e.consume(); 
+                    // Un "beep" para avisar que llegó al límite
+                    Toolkit.getDefaultToolkit().beep(); 
+                }
+                
+                // 2. Si pedimos mayúsculas (para el RFC), convertimos la letra
+                if (soloMayusculas) {
+                    if (Character.isLowerCase(c)) {
+                        e.setKeyChar(Character.toUpperCase(c));
+                    }
+                }
+            }
+        });
+    }
     
     private void boton(){
         btAceptar= new JButton();
@@ -121,57 +137,53 @@ public class AgregarCliente extends JFrame  {
     }
     
     private void eventos(){
-        // --- EVENTO BOTÓN ACEPTAR (Guardar en BD) ---
         ActionListener act = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                // 1. Obtener lo que el usuario escribió en las cajas de texto
-                String rfc = txtRFC.getText();
+                String rfc = txtRFC.getText().trim(); // .trim() quita espacios accidentales al final
                 String nombre = txtNOMBRE.getText();
                 String telefono = txtTELEFONO.getText();
                 String direccion = txtDIRECCION.getText();
                 String email = txtEMAIL.getText();
 
-                // 2. Validación básica: Que no envíen campos vacíos obligatorios
+                // 1. Validación de Campos Vacíos
                 if(rfc.isEmpty() || nombre.isEmpty() || direccion.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor llena los campos obligatorios (RFC, Nombre, Dirección).");
-                    return; // Detiene la ejecución aquí
+                    JOptionPane.showMessageDialog(null, "Faltan datos obligatorios.");
+                    return;
+                }
+                
+                // 2. VALIDACIÓN DB: CHECK (LENGTH(rfc) >= 12)
+                // Aunque limitamos el máximo a 13 arriba, el usuario podría escribir solo 5 letras.
+                // Aquí validamos el MÍNIMO.
+                if (rfc.length() < 12) {
+                    JOptionPane.showMessageDialog(null, "El RFC es inválido.\nDebe tener al menos 12 caracteres.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                    return; // Detenemos el guardado
                 }
 
-                // 3. Conectar con el DAO
-                // Asegúrate de tener acceso a tu clase RiasaDAO aquí
                 RiasaDAO dao = new RiasaDAO(); 
-
-                // 4. Intentar guardar
                 boolean exito = dao.registrarCliente(rfc, nombre, telefono, direccion, email);
 
-                // 5. Dar respuesta al usuario
                 if(exito) {
                     JOptionPane.showMessageDialog(null, "¡Cliente registrado exitosamente!");
-                    
-                    // Opcional: Limpiar las cajas después de guardar
                     limpiarCampos(); 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Error al registrar.\nVerifica que el RFC no esté duplicado o sea muy corto.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Error al registrar.\nVerifica si el RFC o Email ya existen.", "Error BD", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
         btAceptar.addActionListener(act);
         
-        // --- EVENTO BOTÓN LIMPIAR ---
         ActionListener act1 = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                limpiarCampos(); // Llamamos al método auxiliar
+                limpiarCampos();
             }
         };
         btLimpiar.addActionListener(act1);
         
-        // --- EVENTO BOTÓN ATRÁS ---
         ActionListener act2 = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Asegúrate de que HomeRiasa exista y esté importado
                 try {
-                    HomeRiasa hr = new HomeRiasa(); // Descomenta cuando tengas la clase HomeRiasa lista
+                    HomeRiasa hr = new HomeRiasa(); 
                     hr.setVisible(true);
                     dispose();
                 } catch (Exception ex) {
@@ -182,7 +194,6 @@ public class AgregarCliente extends JFrame  {
         btAtras.addActionListener(act2);
     }
 
-    // Método auxiliar para no repetir código de limpiar
     private void limpiarCampos() {
         txtRFC.setText("");
         txtNOMBRE.setText("");
@@ -190,5 +201,4 @@ public class AgregarCliente extends JFrame  {
         txtDIRECCION.setText("");
         txtEMAIL.setText("");
     }
-    
 }
