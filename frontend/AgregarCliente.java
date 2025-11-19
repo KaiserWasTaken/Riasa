@@ -3,119 +3,234 @@ package frontend;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import backend.RiasaDAO; 
+import javax.swing.border.EmptyBorder;
+import backend.RiasaDAO; // Asegúrate que coincida con tu paquete real (Backend o backend)
 
-public class AgregarCliente extends JFrame  {
-    private JPanel panel;
-    private JLabel et1;
-    private JLabel et5;
-    private JLabel et6;
-    private JLabel et7;
-    private JLabel et8;
-    private JLabel et9;
-    private JLabel et10;
-    private JButton btAceptar, btLimpiar, btAtras;
+public class AgregarCliente extends JFrame {
+
+    // Paleta de colores corporativa
+    private Color colorPrimario = new Color(44, 62, 80);    // Azul Oscuro
+    private Color colorFondo    = new Color(236, 240, 241); // Gris Claro
+    private Color colorAcento   = new Color(52, 152, 219);  // Azul Brillante
+    private Color colorTexto    = new Color(51, 51, 51);    // Gris Oscuro
+
+    // Componentes
     private JTextField txtRFC, txtNOMBRE, txtTELEFONO, txtDIRECCION, txtEMAIL;
-    
-    public AgregarCliente(){
-        setBounds(500,90,500,650);
-        setTitle("Registro cliente");
+    private JButton btAceptar, btLimpiar, btAtras;
+
+    public AgregarCliente() {
+        setTitle("Registro de Nuevo Cliente");
+        setBounds(500, 50, 500, 680); // Un poco más alto para que respire el diseño
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        panel();
+        setResizable(false);
+        initUI();
     }
 
-    private void panel(){
-        panel = new JPanel();
-        panel.setLayout(null);
-        this.getContentPane().add(panel);
-        etiqueta();
-        campoTexto(); // Aquí aplicamos las restricciones de longitud
-        boton();
+    private void initUI() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+        mainPanel.setBackground(colorFondo);
+        this.getContentPane().add(mainPanel);
+
+        // --- 1. HEADER (Encabezado) ---
+        JPanel header = new JPanel();
+        header.setBounds(0, 0, 500, 70);
+        header.setBackground(colorPrimario);
+        header.setLayout(null);
+        mainPanel.add(header);
+
+        JLabel lblTitulo = new JLabel("REGISTRO DE CLIENTE");
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitulo.setBounds(0, 0, 500, 70);
+        header.add(lblTitulo);
+
+        // --- 2. FORMULARIO (Panel central blanco) ---
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(null);
+        formPanel.setBounds(30, 90, 425, 430);
+        formPanel.setBackground(Color.WHITE);
+        // Sombra sutil (Borde gris suave)
+        formPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        mainPanel.add(formPanel);
+
+        JLabel lblSubtitulo = new JLabel("Datos Generales");
+        lblSubtitulo.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblSubtitulo.setForeground(colorAcento);
+        lblSubtitulo.setBounds(30, 20, 200, 20);
+        formPanel.add(lblSubtitulo);
+
+        // Separador decorativo
+        JSeparator sep = new JSeparator();
+        sep.setForeground(colorAcento);
+        sep.setBounds(30, 45, 365, 2);
+        formPanel.add(sep);
+
+        // --- CAMPOS DE TEXTO ---
+        // Usamos un método auxiliar 'crearCampo' para no repetir código de diseño
+        
+        // RFC
+        crearEtiqueta(formPanel, "RFC *", 30, 60);
+        txtRFC = crearCampoTexto(formPanel, 30, 85);
+        limitarInput(txtRFC, 13, true); // Restricción: 13 chars, Mayúsculas
+
+        // Nombre
+        crearEtiqueta(formPanel, "Nombre Completo *", 30, 130);
+        txtNOMBRE = crearCampoTexto(formPanel, 30, 155);
+        limitarInput(txtNOMBRE, 100, false);
+
+        // Teléfono
+        crearEtiqueta(formPanel, "Teléfono", 30, 200);
+        txtTELEFONO = crearCampoTexto(formPanel, 30, 225);
+        limitarInput(txtTELEFONO, 20, false);
+
+        // Dirección
+        crearEtiqueta(formPanel, "Dirección *", 30, 270);
+        txtDIRECCION = crearCampoTexto(formPanel, 30, 295);
+        limitarInput(txtDIRECCION, 255, false);
+
+        // Email
+        crearEtiqueta(formPanel, "Correo Electrónico", 30, 340);
+        txtEMAIL = crearCampoTexto(formPanel, 30, 365);
+        limitarInput(txtEMAIL, 100, false);
+
+
+        // --- 3. BOTONES DE ACCIÓN (Footer) ---
+        
+        // Botón ACEPTAR (Verde/Azul Brillante)
+        btAceptar = new JButton("GUARDAR");
+        btAceptar.setBounds(50, 540, 180, 45);
+        btAceptar.setBackground(colorPrimario);
+        btAceptar.setForeground(Color.WHITE);
+        btAceptar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btAceptar.setFocusPainted(false);
+        btAceptar.setBorderPainted(false);
+        btAceptar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // Efecto Hover
+        btAceptar.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) { btAceptar.setBackground(colorAcento); }
+            public void mouseExited(MouseEvent evt) { btAceptar.setBackground(colorPrimario); }
+        });
+        mainPanel.add(btAceptar);
+
+        // Botón LIMPIAR (Gris)
+        btLimpiar = new JButton("Limpiar");
+        btLimpiar.setBounds(250, 540, 100, 45);
+        btLimpiar.setBackground(Color.WHITE);
+        btLimpiar.setForeground(colorTexto);
+        btLimpiar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        btLimpiar.setBorder(BorderFactory.createLineBorder(new Color(200,200,200)));
+        btLimpiar.setFocusPainted(false);
+        btLimpiar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mainPanel.add(btLimpiar);
+
+        // Botón ATRÁS (Rojo sutil o icono)
+        btAtras = new JButton("Salir");
+        btAtras.setBounds(360, 540, 80, 45);
+        btAtras.setBackground(new Color(231, 76, 60)); // Rojo
+        btAtras.setForeground(Color.WHITE);
+        btAtras.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btAtras.setBorderPainted(false);
+        btAtras.setFocusPainted(false);
+        btAtras.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mainPanel.add(btAtras);
+
+        // Inicializar lógica de eventos
         eventos();
     }
 
-    private void etiqueta(){
-        et1= new JLabel();
-        et1.setText("Registro de cliente");
-        et1.setBounds(0,0,500,50);
-        et1.setFont(new Font("Arial",1,20));
-        et1.setBackground(new Color(39, 142, 245));
-        et1.setForeground(Color.white);
-        et1.setHorizontalAlignment(SwingConstants.CENTER);
-        et1.setOpaque(true);
-        panel.add(et1);
-        
-        et5 = new JLabel();
-        et5.setBounds(135,100,200,25);
-        et5.setText("Datos del cliente");
-        et5.setFont(new Font("Arial",1,16));
-        et5.setHorizontalAlignment(SwingConstants.CENTER);
-        panel.add(et5);
-        
-        et6 = new JLabel(); et6.setBounds(50,150, 100, 20);
-        et6.setFont(new Font("arial",2,15)); et6.setText("RFC: "); panel.add(et6);
-        
-        et7 = new JLabel(); et7.setBounds(50,190, 100, 20);
-        et7.setFont(new Font("arial",2,15)); et7.setText("Nombre: "); panel.add(et7);
-        
-        et8 = new JLabel(); et8.setBounds(50,230, 100, 20);
-        et8.setFont(new Font("arial",2,15)); et8.setText("Telefono: "); panel.add(et8);
-        
-        et9 = new JLabel(); et9.setBounds(50,270, 100, 20);
-        et9.setFont(new Font("arial",2,15)); et9.setText("Direccion "); panel.add(et9);
-        
-        et10 = new JLabel(); et10.setBounds(50,310, 100, 20);
-        et10.setFont(new Font("arial",2,15)); et10.setText("Email"); panel.add(et10);
-    }
+    // --- MÉTODOS DE DISEÑO AUXILIARES ---
     
-    private void campoTexto(){
-        // --- RFC (VARCHAR 13) ---
-        txtRFC = new JTextField();
-        txtRFC.setBounds(130,150,280,20);
-        // Aquí limitamos a 13 caracteres y forzamos MAYÚSCULAS automáticamente
-        limitarInput(txtRFC, 13, true); 
-        panel.add(txtRFC);
-        
-        // --- NOMBRE (VARCHAR 100) ---
-        txtNOMBRE = new JTextField();
-        txtNOMBRE.setBounds(130,190,280,20);
-        limitarInput(txtNOMBRE, 100, false);
-        panel.add(txtNOMBRE);
-        
-        // --- TELEFONO (VARCHAR 20) ---
-        txtTELEFONO = new JTextField();
-        txtTELEFONO.setBounds(130,230,280,20);
-        limitarInput(txtTELEFONO, 20, false); 
-        // Opcional: Podrías agregar validación solo números aquí si quisieras
-        panel.add(txtTELEFONO);
-        
-        // --- DIRECCION (VARCHAR 255) ---
-        txtDIRECCION = new JTextField();
-        txtDIRECCION.setBounds(130,270,280,20);
-        limitarInput(txtDIRECCION, 255, false);
-        panel.add(txtDIRECCION);
-        
-        // --- EMAIL (VARCHAR 100) ---
-        txtEMAIL = new JTextField();
-        txtEMAIL.setBounds(130,310,280,20);
-        limitarInput(txtEMAIL, 100, false);
-        panel.add(txtEMAIL);
+    private void crearEtiqueta(JPanel panel, String texto, int x, int y) {
+        JLabel lbl = new JLabel(texto);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lbl.setForeground(colorTexto);
+        lbl.setBounds(x, y, 300, 20);
+        panel.add(lbl);
     }
 
-    // --- NUEVO MÉTODO AUXILIAR PARA RESTRINGIR ESCRITURA ---
+    private JTextField crearCampoTexto(JPanel panel, int x, int y) {
+        JTextField txt = new JTextField();
+        txt.setBounds(x, y, 365, 30);
+        txt.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txt.setForeground(colorTexto);
+        txt.setBackground(Color.WHITE);
+        // Borde inferior moderno
+        txt.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(150,150,150)),
+            BorderFactory.createEmptyBorder(2, 5, 2, 5)
+        ));
+        panel.add(txt);
+        return txt;
+    }
+
+    // --- LÓGICA DE NEGOCIO (Igual que antes, solo adaptada) ---
+
+    private void eventos() {
+        // EVENTO GUARDAR
+        btAceptar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String rfc = txtRFC.getText().trim();
+                String nombre = txtNOMBRE.getText();
+                String telefono = txtTELEFONO.getText();
+                String direccion = txtDIRECCION.getText();
+                String email = txtEMAIL.getText();
+
+                if(rfc.isEmpty() || nombre.isEmpty() || direccion.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Los campos marcados con (*) son obligatorios.", "Faltan Datos", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (rfc.length() < 12) {
+                    JOptionPane.showMessageDialog(null, "El RFC debe tener al menos 12 caracteres.", "RFC Inválido", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                RiasaDAO dao = new RiasaDAO();
+                boolean exito = dao.registrarCliente(rfc, nombre, telefono, direccion, email);
+
+                if(exito) {
+                    JOptionPane.showMessageDialog(null, "✅ Cliente registrado correctamente.");
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(null, "❌ Error al registrar.\nPosiblemente el RFC o Email ya existen.", "Error BD", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // EVENTO LIMPIAR
+        btLimpiar.addActionListener(e -> limpiarCampos());
+
+        // EVENTO ATRÁS
+        btAtras.addActionListener(e -> {
+            try {
+                HomeRiasa hr = new HomeRiasa();
+                hr.setVisible(true);
+                dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
+    private void limpiarCampos() {
+        txtRFC.setText("");
+        txtNOMBRE.setText("");
+        txtTELEFONO.setText("");
+        txtDIRECCION.setText("");
+        txtEMAIL.setText("");
+    }
+
+    // Restricciones de teclado (Igual que tu código anterior)
     private void limitarInput(JTextField campo, int longitudMaxima, boolean soloMayusculas) {
         campo.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                
-                // 1. Si quiere escribir más del límite, lo bloqueamos (consume)
                 if (campo.getText().length() >= longitudMaxima) {
-                    e.consume(); 
-                    // Un "beep" para avisar que llegó al límite
-                    Toolkit.getDefaultToolkit().beep(); 
+                    e.consume();
+                    Toolkit.getDefaultToolkit().beep();
                 }
-                
-                // 2. Si pedimos mayúsculas (para el RFC), convertimos la letra
                 if (soloMayusculas) {
                     if (Character.isLowerCase(c)) {
                         e.setKeyChar(Character.toUpperCase(c));
@@ -125,86 +240,8 @@ public class AgregarCliente extends JFrame  {
         });
     }
     
-    private void boton(){
-        btAceptar= new JButton();
-        btAceptar.setBounds(70,400,80,20);
-        btAceptar.setText("Aceptar");
-        panel.add(btAceptar);
-        
-        btLimpiar= new JButton();
-        btLimpiar.setBounds(200,400,80,20);
-        btLimpiar.setText("Limpiar");
-        panel.add(btLimpiar);
-        
-        btAtras= new JButton();
-        btAtras.setBounds(330,400,80,20);
-        btAtras.setText("Atrás");
-        panel.add(btAtras);
-    }
-    
-    private void eventos(){
-        ActionListener act = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                
-                String rfc = txtRFC.getText().trim(); // .trim() quita espacios accidentales al final
-                String nombre = txtNOMBRE.getText();
-                String telefono = txtTELEFONO.getText();
-                String direccion = txtDIRECCION.getText();
-                String email = txtEMAIL.getText();
-
-                // 1. Validación de Campos Vacíos
-                if(rfc.isEmpty() || nombre.isEmpty() || direccion.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Faltan datos obligatorios.");
-                    return;
-                }
-                
-                // 2. VALIDACIÓN DB: CHECK (LENGTH(rfc) >= 12)
-                // Aunque limitamos el máximo a 13 arriba, el usuario podría escribir solo 5 letras.
-                // Aquí validamos el MÍNIMO.
-                if (rfc.length() < 12) {
-                    JOptionPane.showMessageDialog(null, "El RFC es inválido.\nDebe tener al menos 12 caracteres.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-                    return; // Detenemos el guardado
-                }
-
-                RiasaDAO dao = new RiasaDAO(); 
-                boolean exito = dao.registrarCliente(rfc, nombre, telefono, direccion, email);
-
-                if(exito) {
-                    JOptionPane.showMessageDialog(null, "¡Cliente registrado exitosamente!");
-                    limpiarCampos(); 
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al registrar.\nVerifica si el RFC o Email ya existen.", "Error BD", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
-        btAceptar.addActionListener(act);
-        
-        ActionListener act1 = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                limpiarCampos();
-            }
-        };
-        btLimpiar.addActionListener(act1);
-        
-        ActionListener act2 = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    HomeRiasa hr = new HomeRiasa(); 
-                    hr.setVisible(true);
-                    dispose();
-                } catch (Exception ex) {
-                    System.out.println("Error al regresar: " + ex.getMessage());
-                }
-            }
-        };
-        btAtras.addActionListener(act2);
-    }
-
-    private void limpiarCampos() {
-        txtRFC.setText("");
-        txtNOMBRE.setText("");
-        txtTELEFONO.setText("");
-        txtDIRECCION.setText("");
-        txtEMAIL.setText("");
+    // Main solo para probar vista
+    public static void main(String[] args) {
+        new AgregarCliente().setVisible(true);
     }
 }

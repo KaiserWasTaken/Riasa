@@ -3,149 +3,177 @@ package frontend;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class HomeRiasa extends JFrame {
 
-    private JPanel panel;
-    private JLabel titulo, opTitulo;
-    private JLabel img1, img2, img3;
-    private JLabel txt1, txt2, txt3;
-    private JButton bt1, bt2, bt3;
+    // Paleta de colores (Misma del Login)
+    private Color colorPrimario = new Color(44, 62, 80);    // Azul Oscuro
+    private Color colorFondo    = new Color(236, 240, 241); // Gris Claro
+    private Color colorAcento   = new Color(52, 152, 219);  // Azul Brillante
+    private Color colorBlanco   = Color.WHITE;
 
     public HomeRiasa() {
-        setBounds(500, 90, 500, 650);
-        setTitle("Inicio - RIASA");
+        // Aumentamos un poco el ancho para que quepan las tarjetas cómodamente
+        setBounds(450, 100, 850, 600);
+        setTitle("Panel de Control - RIASA");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        panel();
+        setResizable(false);
+        
+        initUI();
     }
 
-    private void panel() {
-        panel = new JPanel();
-        panel.setLayout(null);
-        panel.setBackground(new Color(230, 230, 230));
-        this.getContentPane().add(panel);
+    private void initUI() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+        mainPanel.setBackground(colorFondo);
+        this.getContentPane().add(mainPanel);
 
-        titulo();
-        contenedorOpciones();
-        botones();
-    }
+        // --- 1. HEADER (Barra Superior) ---
+        JPanel header = new JPanel();
+        header.setBounds(0, 0, 850, 80);
+        header.setBackground(colorPrimario);
+        header.setLayout(null);
+        mainPanel.add(header);
 
-    private void titulo() {
-        titulo = new JLabel();
-        titulo.setText("Bienvenido al inicio, elija una opción.");
-        titulo.setBounds(0, 10, 500, 40);
-        titulo.setFont(new Font("Arial", 1, 20));
-        titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        panel.add(titulo);
-    }
+        JLabel lblTitulo = new JLabel("RIASA | Panel de Control");
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitulo.setBounds(30, 20, 400, 40);
+        header.add(lblTitulo);
 
-    private void contenedorOpciones() {
+        // Botón Cerrar Sesión (Esquina superior derecha)
+        JButton btnLogout = new JButton("Cerrar Sesión");
+        btnLogout.setBounds(680, 25, 130, 30);
+        btnLogout.setBackground(new Color(192, 57, 43)); // Rojo suave
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.setFocusPainted(false);
+        btnLogout.setBorderPainted(false);
+        btnLogout.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnLogout.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnLogout.addActionListener(e -> {
+            // Volver al Login
+            LoginRiasa login = new LoginRiasa();
+            login.setVisible(true);
+            dispose();
+        });
+        header.add(btnLogout);
 
-        // Marco principal similar a la imagen
-        JPanel marco = new JPanel();
-        marco.setLayout(null);
-        marco.setBounds(30, 80, 430, 500);
-        marco.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        marco.setOpaque(true);
-        panel.add(marco);
+        // --- 2. CONTENEDOR DE TARJETAS ---
+        // Aquí llamamos al método auxiliar para crear cada opción
+        // (X, Y, Título, Icono, Descripción, Acción)
 
-        opTitulo = new JLabel();
-        opTitulo.setText("OPCIONES");
-        opTitulo.setFont(new Font("Arial", 1, 14));
-        opTitulo.setBounds(15, 5, 200, 20);
-        marco.add(opTitulo);
-
-        // -------------------------------------------
-        // Opción 1: Añadir Cliente
-        // -------------------------------------------
-        txt1 = new JLabel();
-        txt1.setText("Añadir Cliente");
-        txt1.setFont(new Font("Arial", 1, 16));
-        txt1.setBounds(20, 60, 200, 20);
-        marco.add(txt1);
-
-        img1 = new JLabel();
-        img1.setText("Imagen");
-        img1.setOpaque(true);
-        img1.setBackground(Color.WHITE);
-        img1.setHorizontalAlignment(SwingConstants.CENTER);
-        img1.setBounds(260, 40, 120, 80);
-        marco.add(img1);
-
-        bt1 = new JButton();
-        bt1.setText("Seleccionar");
-        bt1.setBounds(70, 90, 150, 35);
-        marco.add(bt1);
-
-        // -------------------------------------------
-        // Opción 2: Añadir Coche
-        // -------------------------------------------
-        txt2 = new JLabel();
-        txt2.setText("Añadir Coche");
-        txt2.setFont(new Font("Arial", 1, 16));
-        txt2.setBounds(20, 180, 200, 20);
-        marco.add(txt2);
-
-        img2 = new JLabel();
-        img2.setText("Imagen");
-        img2.setOpaque(true);
-        img2.setBackground(Color.WHITE);
-        img2.setHorizontalAlignment(SwingConstants.CENTER);
-        img2.setBounds(260, 160, 120, 80);
-        marco.add(img2);
-
-        bt2 = new JButton();
-        bt2.setText("Seleccionar");
-        bt2.setBounds(70, 210, 150, 35);
-        marco.add(bt2);
-
-        // -------------------------------------------
-        // Opción 3: Generar Factura
-        // -------------------------------------------
-        txt3 = new JLabel();
-        txt3.setText("Generar Factura");
-        txt3.setFont(new Font("Arial", 1, 16));
-        txt3.setBounds(20, 300, 200, 20);
-        marco.add(txt3);
-
-        img3 = new JLabel();
-        img3.setText("Imagen");
-        img3.setOpaque(true);
-        img3.setBackground(Color.WHITE);
-        img3.setHorizontalAlignment(SwingConstants.CENTER);
-        img3.setBounds(260, 280, 120, 80);
-        marco.add(img3);
-
-        bt3 = new JButton();
-        bt3.setText("Seleccionar");
-        bt3.setBounds(70, 330, 150, 35);
-        marco.add(bt3);
-    }
-
-    private void botones() {
-        // Aquí puedes agregar los listeners si los necesitas
-        ActionListener act1 = new ActionListener() {
+        // TARJETA 1: CLIENTES
+        crearTarjeta(mainPanel, 50, 150, "Clientes", "👤", "Registrar nuevos clientes", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AgregarCliente ac = new AgregarCliente();
                 ac.setVisible(true);
                 dispose();
             }
-        };
-        ActionListener act2 = new ActionListener() {
+        });
+
+        // TARJETA 2: AUTOMÓVILES
+        crearTarjeta(mainPanel, 300, 150, "Vehículos", "🚗", "Asignar autos a clientes", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AgregarAuto aa = new AgregarAuto();
                 aa.setVisible(true);
                 dispose();
             }
-        };
-        ActionListener act3 = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Botón presionado");
-            }
-        };
+        });
 
-        bt1.addActionListener(act1);
-        bt2.addActionListener(act2);
-        bt3.addActionListener(act3);
+        // TARJETA 3: FACTURACIÓN
+        crearTarjeta(mainPanel, 550, 150, "Caja / Factura", "📄", "Cobrar y generar PDF", new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Aquí puedes abrir una ventana de "Cobrar" si la creas en el futuro
+                // Por ahora mostramos mensaje o ejecutamos lógica directa
+                JOptionPane.showMessageDialog(null, "Módulo de Facturación (En construcción)");
+            }
+        });
+        
+        // FOOTER (Pie de página decorativo)
+        JLabel lblFooter = new JLabel("Sistema de Gestión v1.0 - 2025");
+        lblFooter.setForeground(new Color(127, 140, 141));
+        lblFooter.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblFooter.setBounds(0, 530, 850, 20);
+        lblFooter.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(lblFooter);
+    }
+
+    /**
+     * MÉTODO MÁGICO: Crea una tarjeta de diseño automáticamente.
+     * Evita repetir código y mantiene el estilo uniforme.
+     */
+    /**
+     * MÉTODO MÁGICO: Crea una tarjeta de diseño automáticamente.
+     * Evita repetir código y mantiene el estilo uniforme.
+     */
+    private void crearTarjeta(JPanel parent, int x, int y, String titulo, String icono, String desc, ActionListener accion) {
+        
+        JPanel card = new JPanel();
+        card.setLayout(null);
+        card.setBounds(x, y, 220, 280); // Tamaño de la tarjeta
+        card.setBackground(colorBlanco); // <-- ¡IMPORTANTE! Aseguramos que la tarjeta sea blanca
+        
+        // Borde inferior azul para darle estilo
+        card.setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, colorAcento));
+        
+        // Sombra simulada (Un panel gris oscuro detrás)
+        // Por ahora, para arreglar el problema visual, vamos a SIMPLIFICAR la sombra.
+        // La forma en que estaba implementada, la sombra se quedaba por encima o no se veía bien.
+        // Si quieres una sombra más avanzada, necesitaríamos una librería o más complejidad.
+        // Por ahora, simplemente agregamos la tarjeta con su fondo blanco.
+        parent.add(card);   // Agregamos la tarjeta directamente
+
+        // 1. Icono (Usamos fuente grande para simular imagen)
+        JLabel lblIcono = new JLabel(icono);
+        lblIcono.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 60)); // Emoji font para los iconos
+        lblIcono.setHorizontalAlignment(SwingConstants.CENTER);
+        lblIcono.setBounds(0, 30, 220, 70); // Centrado en la tarjeta
+        card.add(lblIcono);
+
+        // 2. Título
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblTitulo.setForeground(colorPrimario);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitulo.setBounds(0, 110, 220, 30); // Centrado en la tarjeta
+        card.add(lblTitulo);
+
+        // 3. Descripción
+        JLabel lblDesc = new JLabel("<html><center>" + desc + "</center></html>"); // HTML para centrar texto
+        lblDesc.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblDesc.setForeground(Color.GRAY);
+        lblDesc.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDesc.setBounds(10, 140, 200, 40); // Pequeños márgenes laterales
+        card.add(lblDesc);
+
+        // 4. Botón de Acción
+        JButton btn = new JButton("ACCEDER");
+        btn.setBounds(40, 200, 140, 40); // Ajustar posición para que quede centrado en la tarjeta
+        btn.setBackground(colorPrimario);
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Efecto Hover en el botón
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                btn.setBackground(colorAcento);
+            }
+            public void mouseExited(MouseEvent evt) {
+                btn.setBackground(colorPrimario);
+            }
+        });
+        
+        btn.addActionListener(accion);
+        card.add(btn);
+    }
+    
+    // Main para probar visualmente
+    public static void main(String[] args) {
+        new HomeRiasa().setVisible(true);
     }
 }

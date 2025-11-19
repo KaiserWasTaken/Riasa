@@ -1,10 +1,9 @@
 package frontend;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import backend.RiasaDAO; 
 
@@ -13,54 +12,138 @@ public class LoginRiasa extends JFrame {
     private JTextField txtUsuario;
     private JPasswordField txtPassword;
     private JButton btnIngresar, btnCancelar;
+    
+    // Colores de diseño
+    private Color colorPrimario = new Color(44, 62, 80);   // Azul Oscuro (Sidebar)
+    private Color colorSecundario = new Color(236, 240, 241); // Gris muy claro (Fondo)
+    private Color colorAcento = new Color(52, 152, 219);   // Azul Brillante (Botones/Bordes)
+    private Color colorTexto = new Color(51, 51, 51);      // Gris oscuro (Texto)
 
     public LoginRiasa() {
-        setTitle("Login - RIASA");
-        setBounds(500, 200, 400, 350);
+        setTitle("Acceso al Sistema - RIASA");
+        // Hacemos la ventana un poco más ancha para el diseño dividido
+        setBounds(400, 150, 700, 450); 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        panel();
-        // setVisible(true); // <--- Lo quité de aquí. Es mejor llamarlo desde el Main.java
+        setResizable(false); // Diseño fijo para evitar deformaciones
+        initUI();
     }
 
-    private void panel() {
-        JPanel panel = new JPanel();
-        this.getContentPane().add(panel);
+    private void initUI() {
+        // Panel Principal que contiene todo
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+        this.getContentPane().add(mainPanel);
 
-        // Fondo de un solo color
-        panel.setBackground(new Color(230, 230, 230)); 
-        panel.setLayout(null);
-        panel.setOpaque(true);
+        // --- 1. PANEL IZQUIERDO (BRANDING) ---
+        JPanel sidePanel = new JPanel();
+        sidePanel.setBackground(colorPrimario);
+        sidePanel.setBounds(0, 0, 300, 450);
+        sidePanel.setLayout(null);
+        mainPanel.add(sidePanel);
 
-        // Título
-        panel.add(ventana(90, 10, 220, 40, "RIASA", 28));
+        // Logo / Texto Empresa
+        JLabel lblLogo = new JLabel("RIASA");
+        lblLogo.setForeground(Color.WHITE);
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        lblLogo.setBounds(0, 130, 300, 50);
+        lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+        sidePanel.add(lblLogo);
 
-        // Etiqueta Usuario
-        panel.add(ventana(50, 80, 120, 25, "Usuario:", 14));
+        JLabel lblSlogan = new JLabel("Sistemas Automotrices");
+        lblSlogan.setForeground(new Color(189, 195, 199)); // Gris plata
+        lblSlogan.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblSlogan.setBounds(0, 180, 300, 20);
+        lblSlogan.setHorizontalAlignment(SwingConstants.CENTER);
+        sidePanel.add(lblSlogan);
+        
+        // Decoración (una línea simple)
+        JSeparator separador = new JSeparator();
+        separador.setForeground(new Color(255, 255, 255, 100)); // Blanco transparente
+        separador.setBounds(50, 220, 200, 10);
+        sidePanel.add(separador);
+
+        // --- 2. PANEL DERECHO (FORMULARIO) ---
+        JPanel formPanel = new JPanel();
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBounds(300, 0, 400, 450);
+        formPanel.setLayout(null);
+        mainPanel.add(formPanel);
+
+        // Título "Bienvenido"
+        JLabel lblTitulo = new JLabel("INICIAR SESIÓN");
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitulo.setForeground(colorPrimario);
+        lblTitulo.setBounds(50, 50, 300, 30);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        formPanel.add(lblTitulo);
+
+        // -- CAMPO USUARIO --
+        JLabel lblUser = new JLabel("USUARIO");
+        lblUser.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblUser.setForeground(colorTexto);
+        lblUser.setBounds(50, 110, 300, 20);
+        formPanel.add(lblUser);
 
         txtUsuario = new JTextField();
-        txtUsuario.setBounds(170, 80, 150, 25);
-        panel.add(txtUsuario);
+        txtUsuario.setBounds(50, 135, 300, 30);
+        styleTextField(txtUsuario); // Aplicamos estilo personalizado
+        formPanel.add(txtUsuario);
 
-        // Etiqueta Contraseña
-        panel.add(ventana(50, 130, 120, 25, "Contraseña:", 14));
+        // -- CAMPO CONTRASEÑA --
+        JLabel lblPass = new JLabel("CONTRASEÑA");
+        lblPass.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblPass.setForeground(colorTexto);
+        lblPass.setBounds(50, 190, 300, 20);
+        formPanel.add(lblPass);
 
         txtPassword = new JPasswordField();
-        txtPassword.setBounds(170, 130, 150, 25);
-        panel.add(txtPassword);
+        txtPassword.setBounds(50, 215, 300, 30);
+        styleTextField(txtPassword); // Aplicamos estilo personalizado
+        formPanel.add(txtPassword);
 
-        // Botón INGRESAR
-        btnIngresar = new JButton("Ingresar");
-        btnIngresar.setBounds(70, 200, 110, 30);
-        panel.add(btnIngresar);
+        // -- BOTÓN INGRESAR --
+        btnIngresar = new JButton("INGRESAR");
+        btnIngresar.setBounds(50, 280, 140, 40);
+        btnIngresar.setBackground(colorPrimario);
+        btnIngresar.setForeground(Color.WHITE);
+        btnIngresar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnIngresar.setFocusPainted(false);
+        btnIngresar.setBorderPainted(false);
+        btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // Efecto Hover simple
+        btnIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnIngresar.setBackground(colorAcento);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnIngresar.setBackground(colorPrimario);
+            }
+        });
+        formPanel.add(btnIngresar);
 
-        // Botón CANCELAR
-        btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBounds(210, 200, 110, 30);
-        panel.add(btnCancelar);
+        // -- BOTÓN CANCELAR (Estilo plano/texto) --
+        btnCancelar = new JButton("Salir");
+        btnCancelar.setBounds(210, 280, 140, 40);
+        btnCancelar.setBackground(Color.WHITE);
+        btnCancelar.setForeground(new Color(150, 150, 150)); // Gris suave
+        btnCancelar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        btnCancelar.setFocusPainted(false);
+        btnCancelar.setBorder(BorderFactory.createLineBorder(new Color(200,200,200))); // Borde sutil
+        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelar.setForeground(Color.RED);
+                btnCancelar.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCancelar.setForeground(new Color(150, 150, 150));
+                btnCancelar.setBorder(BorderFactory.createLineBorder(new Color(200,200,200)));
+            }
+        });
+        formPanel.add(btnCancelar);
 
-        // ---- LISTENERS ----
+        // --- LÓGICA DE LOS BOTONES (TU CÓDIGO ORIGINAL) ---
         
-        // CAMBIO IMPORTANTE AQUÍ: Conexión a Base de Datos
         btnIngresar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,38 +151,26 @@ public class LoginRiasa extends JFrame {
                 String pass = new String(txtPassword.getPassword());
 
                 if(user.isEmpty() || pass.isEmpty()){
-                    JOptionPane.showMessageDialog(LoginRiasa.this, "Escriba usuario y contraseña");
+                    JOptionPane.showMessageDialog(LoginRiasa.this, "Por favor, complete todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-                // 1. Instanciamos el DAO
                 RiasaDAO dao = new RiasaDAO();
-                
-                // 2. Preguntamos a la BD (Ella se encarga de encriptar y verificar)
                 String rol = dao.login(user, pass);
 
-                // 3. Verificamos la respuesta
                 if (rol != null) {
-                    // ÉXITO
-                    JOptionPane.showMessageDialog(LoginRiasa.this, "Bienvenido. Rol: " + rol);
+                    JOptionPane.showMessageDialog(LoginRiasa.this, "Acceso concedido.\nBienvenido " + user + " (" + rol + ")");
                     
                     try {
-                        // Abrimos la ventana principal
                         HomeRiasa home = new HomeRiasa();
                         home.setVisible(true);
-                        
-                        // Cerramos el Login
                         dispose(); 
                     } catch (Exception ex) {
                         System.out.println("Error al abrir HomeRiasa: " + ex.getMessage());
                     }
-
                 } else {
-                    // ERROR
                     JOptionPane.showMessageDialog(LoginRiasa.this,
-                            "Usuario o contraseña incorrectos",
-                            "Error de Acceso",
-                            JOptionPane.ERROR_MESSAGE);
+                            "Credenciales incorrectas.", "Error de Seguridad", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -112,22 +183,21 @@ public class LoginRiasa extends JFrame {
         });
     }
 
-    // Método ventana (Lo dejé igual, está muy bien hecho)
-    public JLabel ventana(int x, int y, int w, int h, String txt, int tm) {
-        JLabel etiqueta = new JLabel();
-        etiqueta.setBounds(x, y, w, h);
-        etiqueta.setText(txt);
-        etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
-
-        etiqueta.setOpaque(true);
-        etiqueta.setBackground(Color.white);
-        etiqueta.setFont(new Font("Arial", Font.BOLD, tm));
-
-        return etiqueta;
+    // --- MÉTODO PARA ESTILIZAR CAJAS DE TEXTO (Moderno) ---
+    private void styleTextField(JTextField field) {
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 2, 0, colorAcento), // Línea inferior azul
+            BorderFactory.createEmptyBorder(5, 5, 5, 5))); // Padding interno
+        field.setBackground(Color.WHITE);
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        field.setForeground(colorTexto);
     }
     
-    // main para probar solo esta ventana
     public static void main(String[] args) {
+        // Activar Antialiasing para fuentes suaves (Opcional pero recomendado)
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+        System.setProperty("swing.aatext", "true");
+        
         LoginRiasa lr = new LoginRiasa();
         lr.setVisible(true);
     }

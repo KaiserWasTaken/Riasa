@@ -3,104 +3,242 @@ package frontend;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import backend.RiasaDAO; 
 
-public class AgregarAuto extends JFrame  {
-    private JPanel panel;
-    private JLabel et1,et5, et6, et7,et8 ,et9,et10;
-    private JButton bt1, bt2, bt3;
-    private JTextField txtF1, txtF2, txtF3, txtF4,txtF5;
-    
-    public AgregarAuto(){
-        setBounds(500,90,500,650);
-        setTitle("Registro Auto");
+public class AgregarAuto extends JFrame {
+
+    // Paleta de colores (La misma de todo el sistema)
+    private Color colorPrimario = new Color(44, 62, 80);    // Azul Oscuro
+    private Color colorFondo    = new Color(236, 240, 241); // Gris Claro
+    private Color colorAcento   = new Color(52, 152, 219);  // Azul Brillante
+    private Color colorTexto    = new Color(51, 51, 51);    // Gris Oscuro
+
+    // Componentes
+    private JTextField txtPlaca, txtMarca, txtModelo, txtAnio, txtRFCCliente;
+    private JButton btGuardar, btLimpiar, btAtras;
+
+    public AgregarAuto() {
+        setTitle("Registro de Vehículo");
+        setBounds(500, 50, 500, 680);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        panel();
+        setResizable(false);
+        initUI();
     }
 
-    private void panel(){
-        panel = new JPanel();
-        panel.setLayout(null);
-        this.getContentPane().add(panel);
-        etiqueta();
-        campoTexto();
-        boton();
+    private void initUI() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+        mainPanel.setBackground(colorFondo);
+        this.getContentPane().add(mainPanel);
+
+        // --- 1. HEADER ---
+        JPanel header = new JPanel();
+        header.setBounds(0, 0, 500, 70);
+        header.setBackground(colorPrimario);
+        header.setLayout(null);
+        mainPanel.add(header);
+
+        JLabel lblTitulo = new JLabel("REGISTRO DE VEHÍCULO");
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitulo.setBounds(0, 0, 500, 70);
+        header.add(lblTitulo);
+
+        // --- 2. FORMULARIO ---
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(null);
+        formPanel.setBounds(30, 90, 425, 430);
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        mainPanel.add(formPanel);
+
+        JLabel lblSubtitulo = new JLabel("Datos del Automóvil");
+        lblSubtitulo.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblSubtitulo.setForeground(colorAcento);
+        lblSubtitulo.setBounds(30, 20, 200, 20);
+        formPanel.add(lblSubtitulo);
+
+        JSeparator sep = new JSeparator();
+        sep.setForeground(colorAcento);
+        sep.setBounds(30, 45, 365, 2);
+        formPanel.add(sep);
+
+        // --- CAMPOS DE TEXTO ---
+        
+        // Placa
+        crearEtiqueta(formPanel, "Placa *", 30, 60);
+        txtPlaca = crearCampoTexto(formPanel, 30, 85);
+        limitarInput(txtPlaca, 10, true); // Mayúsculas
+
+        // Marca
+        crearEtiqueta(formPanel, "Marca", 30, 130);
+        txtMarca = crearCampoTexto(formPanel, 30, 155);
+        limitarInput(txtMarca, 50, true);
+
+        // Modelo
+        crearEtiqueta(formPanel, "Modelo", 30, 200);
+        txtModelo = crearCampoTexto(formPanel, 30, 225);
+        limitarInput(txtModelo, 50, true);
+
+        // Año
+        crearEtiqueta(formPanel, "Año (Ej. 2020) *", 30, 270);
+        txtAnio = crearCampoTexto(formPanel, 30, 295);
+        limitarSoloNumeros(txtAnio, 4);
+
+        // Separación visual para el Dueño
+        JSeparator sep2 = new JSeparator();
+        sep2.setForeground(new Color(200,200,200));
+        sep2.setBounds(30, 340, 365, 2);
+        formPanel.add(sep2);
+
+        // RFC Cliente
+        crearEtiqueta(formPanel, "Asignar al Cliente (RFC) *", 30, 355);
+        txtRFCCliente = crearCampoTexto(formPanel, 30, 380);
+        limitarInput(txtRFCCliente, 13, true); // Mayúsculas
+
+
+        // --- 3. BOTONES (Footer) ---
+        
+        // Botón GUARDAR
+        btGuardar = new JButton("GUARDAR");
+        btGuardar.setBounds(50, 540, 180, 45);
+        btGuardar.setBackground(colorPrimario);
+        btGuardar.setForeground(Color.WHITE);
+        btGuardar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btGuardar.setFocusPainted(false);
+        btGuardar.setBorderPainted(false);
+        btGuardar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btGuardar.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) { btGuardar.setBackground(colorAcento); }
+            public void mouseExited(MouseEvent evt) { btGuardar.setBackground(colorPrimario); }
+        });
+        mainPanel.add(btGuardar);
+
+        // Botón LIMPIAR
+        btLimpiar = new JButton("Limpiar");
+        btLimpiar.setBounds(250, 540, 100, 45);
+        btLimpiar.setBackground(Color.WHITE);
+        btLimpiar.setForeground(colorTexto);
+        btLimpiar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        btLimpiar.setBorder(BorderFactory.createLineBorder(new Color(200,200,200)));
+        btLimpiar.setFocusPainted(false);
+        btLimpiar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mainPanel.add(btLimpiar);
+
+        // Botón SALIR
+        btAtras = new JButton("Salir");
+        btAtras.setBounds(360, 540, 80, 45);
+        btAtras.setBackground(new Color(231, 76, 60)); // Rojo
+        btAtras.setForeground(Color.WHITE);
+        btAtras.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btAtras.setBorderPainted(false);
+        btAtras.setFocusPainted(false);
+        btAtras.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mainPanel.add(btAtras);
+
+        // Iniciar eventos
         eventos();
     }
 
-    private void etiqueta(){
-        et1= new JLabel();
-        et1.setText("Registro de auto");
-        et1.setBounds(0,0,500,50);
-        et1.setFont(new Font("Arial",1,20));
-        et1.setBackground(new Color(39, 142, 245));
-        et1.setForeground(Color.white);
-        et1.setHorizontalAlignment(SwingConstants.CENTER);
-        et1.setOpaque(true);
-        panel.add(et1);
-        
-        et5 = new JLabel();
-        et5.setBounds(135,100,200,25);
-        et5.setText("Datos del auto");
-        et5.setFont(new Font("Arial",1,16));
-        et5.setHorizontalAlignment(SwingConstants.CENTER);
-        panel.add(et5);
-        
-        et6 = new JLabel(); et6.setBounds(50,150, 100, 20);
-        et6.setFont(new Font("arial",2,15)); et6.setText("Placa: "); panel.add(et6);
-        
-        et7 = new JLabel(); et7.setBounds(50,190, 100, 20);
-        et7.setFont(new Font("arial",2,15)); et7.setText("Marca: "); panel.add(et7);
-        
-        et8 = new JLabel(); et8.setBounds(50,230, 100, 20);
-        et8.setFont(new Font("arial",2,15)); et8.setText("Modelo: "); panel.add(et8);
-        
-        et9 = new JLabel(); et9.setBounds(50,270, 100, 20);
-        et9.setFont(new Font("arial",2,15)); et9.setText("Año: "); panel.add(et9);
-        
-        et10 = new JLabel(); et10.setBounds(50,310, 150, 20);
-        et10.setFont(new Font("arial",2,15)); et10.setText("RFC del cliente:"); panel.add(et10);
+    // --- MÉTODOS DE DISEÑO (Reutilizados) ---
+    private void crearEtiqueta(JPanel panel, String texto, int x, int y) {
+        JLabel lbl = new JLabel(texto);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lbl.setForeground(colorTexto);
+        lbl.setBounds(x, y, 300, 20);
+        panel.add(lbl);
     }
-    
-    private void campoTexto(){
-        // --- PLACA (VARCHAR 10) ---
-        txtF1 = new JTextField();
-        txtF1.setBounds(170,150,240,20);
-        limitarInput(txtF1, 10, true); // Mayúsculas forzadas
-        panel.add(txtF1);
-        
-        // --- MARCA (VARCHAR 50) ---
-        txtF2 = new JTextField();
-        txtF2.setBounds(170,190,240,20);
-        limitarInput(txtF2, 50, true);
-        panel.add(txtF2);
-        
-        // --- MODELO (VARCHAR 50) ---
-        txtF3 = new JTextField();
-        txtF3.setBounds(170,230,240,20);
-        limitarInput(txtF3, 50, true);
-        panel.add(txtF3);
-        
-        // --- AÑO (INT) ---
-        txtF4 = new JTextField();
-        txtF4.setBounds(170,270,240,20);
-        limitarSoloNumeros(txtF4, 4); // Solo dígitos, max 4
-        panel.add(txtF4);
-        
-        // --- RFC CLIENTE (VARCHAR 13) ---
-        txtF5 = new JTextField();
-        txtF5.setBounds(170,310,240,20);
-        limitarInput(txtF5, 13, true); // Mayúsculas forzadas
-        panel.add(txtF5);
+
+    private JTextField crearCampoTexto(JPanel panel, int x, int y) {
+        JTextField txt = new JTextField();
+        txt.setBounds(x, y, 365, 30);
+        txt.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txt.setForeground(colorTexto);
+        txt.setBackground(Color.WHITE);
+        txt.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(150,150,150)),
+            BorderFactory.createEmptyBorder(2, 5, 2, 5)
+        ));
+        panel.add(txt);
+        return txt;
     }
-    
-    // Método auxiliar para texto normal (Placa, Marca, Modelo, RFC)
+
+    // --- LÓGICA ---
+
+    private void eventos() {
+        // GUARDAR
+        btGuardar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String placa = txtPlaca.getText().trim();
+                String marca = txtMarca.getText();
+                String modelo = txtModelo.getText();
+                String anioStr = txtAnio.getText();
+                String rfcCliente = txtRFCCliente.getText().trim();
+
+                if(placa.isEmpty() || marca.isEmpty() || modelo.isEmpty() || anioStr.isEmpty() || rfcCliente.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int anio = 0;
+                try {
+                    anio = Integer.parseInt(anioStr);
+                    if (anio <= 1900 || anio > 2026) {
+                        JOptionPane.showMessageDialog(null, "El año debe ser coherente (1900-2026).", "Año Inválido", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(null, "El año debe ser numérico.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                RiasaDAO dao = new RiasaDAO();
+                boolean exito = dao.registrarAuto(placa, marca, modelo, anio, rfcCliente);
+
+                if(exito) {
+                    JOptionPane.showMessageDialog(null, "✅ Vehículo registrado correctamente.");
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(null, 
+                        "❌ Error al registrar.\nVerifica que la Placa no exista y que el RFC del Cliente sea correcto.", 
+                        "Error BD", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // LIMPIAR
+        btLimpiar.addActionListener(e -> limpiarCampos());
+
+        // ATRÁS
+        btAtras.addActionListener(e -> {
+            try {
+                HomeRiasa hr = new HomeRiasa();
+                hr.setVisible(true);
+                dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
+    private void limpiarCampos() {
+        txtPlaca.setText("");
+        txtMarca.setText("");
+        txtModelo.setText("");
+        txtAnio.setText("");
+        txtRFCCliente.setText("");
+    }
+
+    // Validaciones de teclado
     private void limitarInput(JTextField campo, int longitudMaxima, boolean soloMayusculas) {
         campo.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (campo.getText().length() >= longitudMaxima) {
-                    e.consume(); Toolkit.getDefaultToolkit().beep();
+                    e.consume();
+                    Toolkit.getDefaultToolkit().beep();
                 }
                 if (soloMayusculas && Character.isLowerCase(c)) {
                     e.setKeyChar(Character.toUpperCase(c));
@@ -109,108 +247,23 @@ public class AgregarAuto extends JFrame  {
         });
     }
 
-    // Método auxiliar exclusivo para el AÑO (Solo números)
     private void limitarSoloNumeros(JTextField campo, int longitudMaxima) {
         campo.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                // Si no es dígito, lo bloqueamos
                 if (!Character.isDigit(c)) {
                     e.consume();
                     return;
                 }
                 if (campo.getText().length() >= longitudMaxima) {
-                    e.consume(); Toolkit.getDefaultToolkit().beep();
+                    e.consume();
+                    Toolkit.getDefaultToolkit().beep();
                 }
             }
         });
     }
     
-    private void boton(){
-        bt1= new JButton(); bt1.setBounds(70,400,80,20); bt1.setText("Aceptar"); panel.add(bt1);
-        bt2= new JButton(); bt2.setBounds(200,400,80,20); bt2.setText("Limpiar"); panel.add(bt2);
-        bt3= new JButton(); bt3.setBounds(330,400,80,20); bt3.setText("Atrás"); panel.add(bt3);
-    }
-    
-    private void eventos(){
-        // --- BOTÓN ACEPTAR ---
-        ActionListener act = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 1. Obtener datos
-                String placa = txtF1.getText().trim();
-                String marca = txtF2.getText();
-                String modelo = txtF3.getText();
-                String anioStr = txtF4.getText();
-                String rfcCliente = txtF5.getText().trim();
-
-                // 2. Validar vacíos
-                if(placa.isEmpty() || marca.isEmpty() || modelo.isEmpty() || anioStr.isEmpty() || rfcCliente.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
-                    return;
-                }
-
-                // 3. Validar Año (Lógica)
-                int anio = 0;
-                try {
-                    anio = Integer.parseInt(anioStr);
-                    if (anio <= 1900 || anio > 2026) {
-                        JOptionPane.showMessageDialog(null, "El año debe ser mayor a 1900 y menor a 2027.");
-                        return;
-                    }
-                } catch (NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(null, "El año no es válido.");
-                    return;
-                }
-
-                // 4. Guardar en BD
-                RiasaDAO dao = new RiasaDAO();
-                boolean exito = dao.registrarAuto(placa, marca, modelo, anio, rfcCliente);
-
-                // 5. Resultado
-                if(exito) {
-                    JOptionPane.showMessageDialog(null, "✅ Auto registrado correctamente.");
-                    limpiarCampos();
-                } else {
-                    // Mensaje específico por si falla la llave foránea
-                    JOptionPane.showMessageDialog(null, 
-                        "Error al registrar.\n" +
-                        "Posibles causas:\n" +
-                        "1. La placa ya existe.\n" +
-                        "2. El RFC del cliente NO existe (Registra al cliente primero).", 
-                        "Error BD", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
-        bt1.addActionListener(act);
-        
-        // --- BOTÓN LIMPIAR ---
-        ActionListener act1 = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                limpiarCampos();
-            }
-        };
-        bt2.addActionListener(act1);
-        
-        // --- BOTÓN ATRÁS ---
-        ActionListener act2 = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    HomeRiasa hr = new HomeRiasa();
-                    hr.setVisible(true);
-                    dispose();
-                } catch (Exception ex) {
-                    System.out.println("Error al regresar: " + ex.getMessage());
-                }
-            }
-        };
-        bt3.addActionListener(act2);
-    }
-
-    private void limpiarCampos() {
-        txtF1.setText("");
-        txtF2.setText("");
-        txtF3.setText("");
-        txtF4.setText("");
-        txtF5.setText("");
+    public static void main(String[] args) {
+        new AgregarAuto().setVisible(true);
     }
 }
