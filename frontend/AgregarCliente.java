@@ -8,7 +8,7 @@ public class AgregarCliente extends JFrame  {
     private JPanel panel;
     private JLabel et1,et5, et6, et7,et8 ,et9,et10;
     private JButton bt1, bt2, bt3;
-    private JTextField txtF1, txtF2, txtF3, txtF4,txtF5;
+    private JTextField txtRFC, txtNOMBRE, txtTELEFONO, txtDIRECCION, txtEMAIL;
     
     public AgregarCliente(){
         setBounds(500,90,500,650);
@@ -78,25 +78,25 @@ public class AgregarCliente extends JFrame  {
     }
     
     private void campoTexto(){
-        txtF1 = new JTextField();
-        txtF1.setBounds(130,150,280,20);
-        panel.add(txtF1);
+        txtRFC = new JTextField();
+        txtRFC.setBounds(130,150,280,20);
+        panel.add(txtRFC);
         
-        txtF2 = new JTextField();
-        txtF2.setBounds(130,190,280,20);
-        panel.add(txtF2);
+        txtNOMBRE = new JTextField();
+        txtNOMBRE.setBounds(130,190,280,20);
+        panel.add(txtNOMBRE);
         
-        txtF3 = new JTextField();
-        txtF3.setBounds(130,230,280,20);
-        panel.add(txtF3);
+        txtTELEFONO = new JTextField();
+        txtTELEFONO.setBounds(130,230,280,20);
+        panel.add(txtTELEFONO);
         
-        txtF4 = new JTextField();
-        txtF4.setBounds(130,270,280,20);
-        panel.add(txtF4);
+        txtDIRECCION = new JTextField();
+        txtDIRECCION.setBounds(130,270,280,20);
+        panel.add(txtDIRECCION);
         
-        txtF5 = new JTextField();
-        txtF5.setBounds(130,310,280,20);
-        panel.add(txtF5);
+        txtEMAIL = new JTextField();
+        txtEMAIL.setBounds(130,310,280,20);
+        panel.add(txtEMAIL);
     }
     
      
@@ -131,11 +131,11 @@ public class AgregarCliente extends JFrame  {
         //Evento para boton limipar
         ActionListener act1 = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                txtF1.setText(null);
-                txtF2.setText(null);
-                txtF3.setText(null);
-                txtF4.setText(null);
-                txtF5.setText(null);
+                txtRFC.setText(null);
+                txtNOMBRE.setText(null);
+                txtTELEFONO.setText(null);
+                txtDIRECCION.setText(null);
+                txtEMAIL.setText(null);
                 }
         };
         bt2.addActionListener(act1);
@@ -149,9 +149,6 @@ public class AgregarCliente extends JFrame  {
                 }
         };
         bt3.addActionListener(act2);
-        
-       
-                
     }
     
 }
