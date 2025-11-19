@@ -43,7 +43,7 @@ public class Main {
         }
         */
 
-        /* 
+        
         // --- SIMULACIÓN DE CREAR COTIZACIÓN ---
         String rfcCliente = "XAXX010101000"; // Asegúrate que este RFC exista en tu BD
         String placaAuto = "ABC-123";       // Asegúrate que esta placa exista en tu BD
@@ -70,28 +70,38 @@ public class Main {
         } else {
             System.out.println("❌ Error al guardar la cotización.");
         }
-        */
+        
 
-        // --- DATOS QUE VENDRÍAN DE LA INTERFAZ GRÁFICA ---
-        int idCotizacionAPagar = 1; // <--- CAMBIA ESTO por un ID real que tengas en tu tabla 'cotizaciones'
-        String rfcCliente = "XAXX010101000"; 
-        String metodoPago = "Tarjeta de Crédito";
-        double montoRecibido = 3560.50; // Debe ser igual o mayor al total de la cotización
+        // --- DATOS SIMULADOS (Como si vinieran de tu interfaz) ---
+        // IMPORTANTE: Cambia este ID por una cotización que SI EXISTA en tu BD y que NO ESTÉ PAGADA aún.
+        int idCotizacionAPagar = 2; 
+        
+        String nombreCliente = "Maria Gonzales"; // Esto normalmente lo sacarías con una consulta extra al DAO
+        String metodoPago = "Efectivo";
+        double montoTotal = 3150.50; // Debe coincidir con el total de la cotización
 
-        System.out.println("--- INICIANDO PROCESO DE COBRO ---");
+        System.out.println("--- PROCESANDO PAGO Y TICKET ---");
 
-        // 1. Llamamos al DAO para validar y registrar
-        int idFactura = dao.generarFactura(idCotizacionAPagar, metodoPago, montoRecibido, rfcCliente);
+        // 2. Registrar el pago en la BD
+        int idFacturaGenerada = dao.generarFactura(idCotizacionAPagar, metodoPago, montoTotal, rfcCliente);
 
-        if (idFactura != -1) {
-            System.out.println("✅ Pago registrado exitosamente. Factura ID: " + idFactura);
+        if (idFacturaGenerada != -1) {
+            System.out.println("✅ Pago registrado en BD. ID Factura: " + idFacturaGenerada);
 
-            // 2. Generamos el documento PDF
-            // Nota: En un sistema real, haríamos otra consulta para obtener el nombre del cliente basado en el RFC
-            pdf.crearTicketFactura(idFactura, idCotizacionAPagar, "Juan Perez (RFC: " + rfcCliente + ")", montoRecibido, metodoPago);
+            // 3. Generar el TICKET (Usando el nuevo método que hicimos)
+            pdf.crearTicketFactura(
+                idFacturaGenerada,  // Folio del ticket
+                idCotizacionAPagar, // Referencia
+                nombreCliente,      // Nombre para mostrar
+                montoTotal,         // Dinero
+                metodoPago          // 'Efectivo', etc.
+            );
             
+            System.out.println("✅ Ticket generado y abierto correctamente.");
+
         } else {
-            System.out.println("❌ Error al generar la factura. Verifique monto o si ya fue pagada.");
+            System.out.println("❌ Error: No se pudo cobrar.");
+            System.out.println("   Posibles causas: La cotización no existe, ya fue pagada antes, o el monto es incorrecto.");
         }
     }
 }
