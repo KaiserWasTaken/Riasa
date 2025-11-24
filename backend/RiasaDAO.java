@@ -2,6 +2,8 @@ package backend;
 
 import java.sql.*;
 import java.util.List;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class RiasaDAO {
 
@@ -215,5 +217,93 @@ public class RiasaDAO {
         }
         
         return rolEncontrado;
+    }
+
+    public String loginInteligente(String usuario, String contraPlana) {
+        Connection conn = null;
+        try {
+            conn = Conexion.getConexion();
+
+            // 1. PRIMERO: Verificar si el usuario existe y si está bloqueado
+            String sqlCheck = "SELECT password, rol, intentos_fallidos, bloqueado_hasta FROM usuarios_sistema WHERE username = ?";
+            PreparedStatement psCheck = conn.prepareStatement(sqlCheck);
+            psCheck.setString(1, usuario);
+            ResultSet rs = psCheck.executeQuery();
+
+            if (rs.next()) {
+                // El usuario existe, extraemos datos
+                String passRealHash = rs.getString("password");
+                String rol = rs.getString("rol");
+                int intentos = rs.getInt("intentos_fallidos");
+                Timestamp bloqueo = rs.getTimestamp("bloqueado_hasta");
+
+                // A. ¿ESTÁ BLOQUEADO ACTUALMENTE?
+                if (bloqueo != null) {
+                    Date ahora = new Date();
+                    if (ahora.before(bloqueo)) {
+                        // Calcular minutos restantes
+                        long diferencia = bloqueo.getTime() - ahora.getTime();
+                        long minutosRestantes = (diferencia / (1000 * 60)) + 1;
+                        return "BLOQUEADO:" + minutosRestantes;
+                    }
+                }
+
+                // B. VALIDAR CONTRASEÑA
+                // (Recuerda usar Seguridad.encriptar si ya implementaste SHA-256, si no, usa equals directo)
+                String contraInputHash = Seguridad.encriptar(contraPlana); 
+                // String contraInputHash = contraPlana; // <--- CAMBIA ESTO si usas encriptación
+
+                if (passRealHash.equals(contraInputHash)) {
+                    // ¡ÉXITO! -> Reseteamos contadores a 0
+                    resetearIntentos(usuario);
+                    return rol; 
+                } else {
+                    // ¡FALLÓ! -> Aumentamos contador y calculamos castigo
+                    registrarFallo(usuario, intentos + 1);
+                    return "ERROR_PASS";
+                }
+            }
+            return "NO_EXISTE"; // Usuario no encontrado
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "ERROR_DB";
+        }
+    }
+
+    // --- AUXILIAR: Resetea cuando entra bien ---
+    private void resetearIntentos(String usuario) {
+        try (Connection conn = Conexion.getConexion();
+            PreparedStatement ps = conn.prepareStatement("UPDATE usuarios_sistema SET intentos_fallidos = 0, bloqueado_hasta = NULL WHERE username = ?")) {
+            ps.setString(1, usuario);
+            ps.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    // --- AUXILIAR: Castiga si falla ---
+    private void registrarFallo(String usuario, int nuevosIntentos) {
+        int minutosCastigo = 0;
+
+        // REGLA DE NEGOCIO: 3 fallos=5min, 4=10min, 5=20min, 6+=30min
+        if (nuevosIntentos == 3) minutosCastigo = 5;
+        else if (nuevosIntentos == 4) minutosCastigo = 10;
+        else if (nuevosIntentos == 5) minutosCastigo = 20;
+        else if (nuevosIntentos >= 6) minutosCastigo = 30;
+
+        String sql;
+        if (minutosCastigo > 0) {
+            // Sumar minutos a la hora actual (Sintaxis Postgres)
+            sql = "UPDATE usuarios_sistema SET intentos_fallidos = ?, bloqueado_hasta = CURRENT_TIMESTAMP + interval '" + minutosCastigo + " minutes' WHERE username = ?";
+        } else {
+            // Solo aumentar contador sin bloquear
+            sql = "UPDATE usuarios_sistema SET intentos_fallidos = ?, bloqueado_hasta = NULL WHERE username = ?";
+        }
+
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, nuevosIntentos);
+            ps.setString(2, usuario);
+            ps.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 }
